@@ -98,7 +98,7 @@ class Quiz(models.Model):
 
     # Methods
     def __str__(self):
-        return self.name
+        return f"{self.name} - {jalili_converter(self.created)}"
 
     def questions(self):
         return self.question_quiz.all()
@@ -217,7 +217,7 @@ class QuizDescAnswers(models.Model):
 
     # Methods
     def __str__(self):
-        return self.question
+        return format_html(self.question.text)
 
 
 class QuizResult(models.Model):
@@ -249,4 +249,4 @@ class QuizResult(models.Model):
 
     # Methods
     def __str__(self):
-        return str(self.pk)
+        return "str(self.pk)"

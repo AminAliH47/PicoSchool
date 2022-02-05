@@ -411,15 +411,29 @@
                                         <div class="row gutters-8">
                                             {% if request.user.is_superuser or request.user.is_manager or request.user.is_teacher %}
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <span class="small mb-1">جستجو نام دانش آموز</span>
+                                                <div class="col-md-8">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <span class="small mb-1">جستجو نام دانش آموز</span>
+                                                        </div>
+                                                        <div class="col-lg-5 col-6 form-group">
+                                                            {{ filter.form.full_name }}
+                                                        </div>
+                                                        <div class="col-lg-3 col-6 form-group">
+                                                            <button type="submit" class="btn search_btn">جستجو
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-lg-5 col-6 form-group">
-                                                    {{ filter.form.full_name }}
-                                                </div>
-                                                <div class="col-lg-3 col-6 form-group">
-                                                    <button type="submit" class="btn search_btn">جستجو
-                                                    </button>
+                                                <div class="col-md-4">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <span class="small mb-1">جستجو بر اساس آزمون</span>
+                                                        </div>
+                                                        <div class="col-lg-5 col-6 form-group">
+                                                            {{ filter.form.quiz }}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             {% endif %}
