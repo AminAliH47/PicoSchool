@@ -49,7 +49,7 @@ pip install -r requirements.txt
 <hr>
 
 <h5>
-Configuration of project almost done
+Configuration of project almost done.
 </h5>
 <h3 style="margin: 30px 0 -5px 0;">
 🏁 Run the project
@@ -72,6 +72,16 @@ You should see This message:
 </p>
 <pre>
 python manage.py runserver 8002
+</pre>
+<h4>
+Congratulations, you ran the project correctly ✅
+</h4>
+
+<p>
+Now copy/paste this address in your browser URL bar:
+</p>
+<pre>
+http://127.0.0.1:8002/
 </pre>
 
 <h6 align="center" style="font-weight: 200;">
