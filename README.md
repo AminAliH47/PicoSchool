@@ -2,7 +2,7 @@
   
   <img src="https://s20.picofile.com/file/8447413126/picoschool.png" alt="PicoSchool" width="40%">
 
-  <i style="margin-top: 10px;">
+  <i style="margin-top: 10px; display: block;">
   Advanced school management system written in Django :)
   </i>
   <hr style="border: 1px solid #00ff00ff;">
