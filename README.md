@@ -4,17 +4,38 @@
 Advanced school management system written in Django :)
 </p>
 
-<h3 style="margin: 30px 0 5px 0;">
+<h3 style="margin: 30px 0 -5px 0;">
 ⚙️ Run the project
 </h3>
 <hr>
+
 <p>
 First you should make venv for this project.
-So in the main root of project you should write this command in your Terminal or Console: 
+So in the main root of project you should type this command in your Terminal or Console: 
 </p>
 <pre>
 python -m venv venv
 </pre>
 <p>
-Then you should install the <b>requierments.txt</b> file
+Now you should activate your venv.
+So in the main root of project you should type this command in your Terminal or Console: 
 </p>
+<b>
+In Linux/macOS:
+</b>
+<pre>
+source venv/bin/activate
+</pre>
+<b>
+In Windows:
+</b>
+<pre>
+venv/Scripts/activate.ps1
+</pre>
+
+<p>
+After activating venv you should install the <b>requirements.txt</b> packages. So type this command in your Terminal or Console: 
+</p>
+<pre>
+pip install -r requirements.txt
+</pre>
