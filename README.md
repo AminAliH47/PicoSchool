@@ -4,7 +4,7 @@
 Advanced school management system written in Django :)
 </p>
 
-<h3 style="margin-top: 20px;">
+<h3 style="margin: 30px 0 5px 0;">
 ⚙️ Run the project
 </h3>
 <hr>
@@ -15,3 +15,6 @@ So in the main root of project you should write this command in your Terminal or
 <pre>
 python -m venv venv
 </pre>
+<p>
+Then you should install the <b>requierments.txt</b> file
+</p>
