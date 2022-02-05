@@ -46,6 +46,14 @@ After activating venv you should install the <b>requirements.txt</b> packages. S
 pip install -r requirements.txt
 </pre>
 
+<hr>
+
+<h5>
+Configuration of project almost done
+</h5>
+<h3 style="margin: 30px 0 -5px 0;">
+🏁 Run the project
+</h3>
 
 <h6 align="center" style="font-weight: 200;">
   Licensed by <b>Coilaco</b>
