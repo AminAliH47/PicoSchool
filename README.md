@@ -134,7 +134,7 @@ http://127.0.0.1:8002/pico-school/
 </pre>
 
 <h4>
-Now you can use all the features of PicoSchool.
+⭐️ Now you can use all the features of PicoSchool.
 </h4>
 
 <p>
