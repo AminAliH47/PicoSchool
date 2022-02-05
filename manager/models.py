@@ -195,7 +195,7 @@ class Major(models.Model):
     # Metadata
     class Meta:
         verbose_name = 'رشته'
-        verbose_name_plural = '4. رشته های تحصیلی'
+        verbose_name_plural = '04. رشته های تحصیلی'
 
     # Methods
     def __str__(self):
