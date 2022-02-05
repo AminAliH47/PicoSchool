@@ -84,6 +84,28 @@ Now copy/paste this address in your browser URL bar:
 http://127.0.0.1:8002/
 </pre>
 
+<hr>
+<h3 style="margin: 30px 0 -5px 0;">
+✅ Use the project
+</h3>
+<h5>
+Now you should Login into the PicoSchool. 
+</h5>
+<p>
+In default Database, we have some sample user in custom Roles. <br>
+You can login to PicoSchool with different roles, the usernames and passwords of these sample users in the default database are listed below:
+</p>
+<ul>
+  <li>
+    Manager role:
+    <pre>
+    username: Admin
+    password: Admin12345
+    </pre>
+  </li>
+  
+</ul>
+
 <h6 align="center" style="font-weight: 200;">
   Licensed by <b>Coilaco</b>
 </h6>
