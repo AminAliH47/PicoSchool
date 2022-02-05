@@ -5,7 +5,6 @@ Advanced school management system written in Django :)
 </p>
 
 <br>
-<br>
 <h3 style="margin: 30px 0 -5px 0;">
 ⚙️ Run the project
 </h3>
