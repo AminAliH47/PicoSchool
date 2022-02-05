@@ -1,3 +1,4 @@
+import functools
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -5,6 +6,7 @@ from django.urls import reverse_lazy
 
 def is_login():
     def decorator(view_func):
+        @functools.wraps(func)
         def wrap(request, *args, **kwargs):
             if request.user.is_anonymous:
               return view_func(request, *args, **kwargs)
