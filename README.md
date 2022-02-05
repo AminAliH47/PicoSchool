@@ -62,9 +62,11 @@ python manage.py check
 </pre>
 <p>
 You should see This message:
-  <i>
-    "System check identified no issues (0 silenced)."
-  </i>
+  <strong>
+    <i>
+      "System check identified no issues (0 silenced)."
+    </i>
+  </strong>
 </p>
 
 
