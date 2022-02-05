@@ -112,10 +112,10 @@ password: Admin12345
   </li>
   <li>
     Student role:
-<pre>
+```bash
 username: 0923456789
 password: Admin12345
-</pre>
+```
   </li>
   <li>
     Parent role:
@@ -125,6 +125,14 @@ password: Admin12345
 </pre>
   </li>
 </ul>
+
+<h5>
+Main admin panel path:
+</h5>
+<pre>
+
+</pre>
+
 
 <h6 align="center" style="font-weight: 200;">
   Licensed by <b>Coilaco</b>
