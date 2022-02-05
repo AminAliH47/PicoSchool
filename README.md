@@ -55,7 +55,7 @@ Configuration of project almost done
 🏁 Run the project
 </h3>
 <p>
-First of all, please enter the following command in the terminal to make sure the project is configured correctly:
+First of all, please enter the following command in the Terminal or Console to make sure the project is configured correctly:
 </p>
 <pre>
 python manage.py check
@@ -67,8 +67,12 @@ You should see This message:
       "System check identified no issues (0 silenced)."
     </i>
   </strong>
+  <br>
+  If you see this message you can run project. So type this command in Terminal or Console:
 </p>
-
+<pre>
+python manage.py runserver 8002
+</pre>
 
 <h6 align="center" style="font-weight: 200;">
   Licensed by <b>Coilaco</b>
