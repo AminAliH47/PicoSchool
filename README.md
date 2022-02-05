@@ -1,9 +1,12 @@
-<img src="https://s20.picofile.com/file/8447413126/picoschool.png" width="50%" style="margin: auto; text-align: center;">
+<div style="width: 100%; text-align: center;">
+  
+  <img src="https://s20.picofile.com/file/8447413126/picoschool.png" width="40%" style="margin: auto; text-align: center;">
 
-<p style="margin-top: 10px;margin: auto; text-align: center;">
-Advanced school management system written in Django :)
-</p>
-<hr style="border: 1px solid #00ff00ff;">
+  <p style="margin-top: 10px;margin: auto; text-align: center;">
+  Advanced school management system written in Django :)
+  </p>
+  <hr style="border: 1px solid #00ff00ff;">
+</div>
 
 <br>
 <h3 style="margin: 30px 0 -5px 0;">
