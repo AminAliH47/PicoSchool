@@ -54,6 +54,19 @@ Configuration of project almost done
 <h3 style="margin: 30px 0 -5px 0;">
 🏁 Run the project
 </h3>
+<p>
+First of all, please enter the following command in the terminal to make sure the project is configured correctly:
+</p>
+<pre>
+python manage.py check
+</pre>
+<p>
+You should see This message:
+  <i>
+    "System check identified no issues (0 silenced)."
+  </i>
+</p>
+
 
 <h6 align="center" style="font-weight: 200;">
   Licensed by <b>Coilaco</b>
