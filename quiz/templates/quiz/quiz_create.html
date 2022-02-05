@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block main %}
+{% if request.resolver_match.url_name == 'quiz_create' or request.resolver_match.url_name == 'quiz_update'%}
+<div class="mt-5 m-3">
+    <div class="breadcrumbs-area">
+        <h3>ساخت آزمون</h3>
+    </div>
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="single-info-details">
+                <div class="item-content">
+                    <div class="content-inline item-content">
+                        <form class="new-added-form" method="post">{% csrf_token %}
+                            <div class="row">
+                                <div class="col-lg-12 col-12">
+                                    <p class="form-group-title">اطلاعات عمومی</p>
+                                </div>
+                                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                    <label> نام آزمون <span>*</span></label>
+                                    {{ form.name }}
+                                </div>
+                                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                    <label> موضوع <span>*</span></label>
+                                    {{ form.topic }}
+                                </div>
+                                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                    <label> کلاس <span>*</span></label>
+                                    {{ form.quiz_class }}
+                                </div>
+                                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                    <label> کتاب <span>*</span></label>
+                                    {{ form.quiz_book }}
+                                </div>
+                                <div class="col-lg-12 col-12">
+                                    <p class="form-group-title">بیشتر</p>
+                                </div>
+                                <div class="col-xl-2 col-lg-6 col-12 form-group">
+                                    <label> زمان آزمون <span>*</span></label>
+                                    {{ form.time }}
+                                    <p class="help_text">{{ form.time.help_text }}</p>
+                                </div>
+                                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                    <label> سختی <span>*</span></label>
+                                    {{ form.difficulty }}
+                                </div>
+                                {% if request.resolver_match.url_name == "quiz_update" %}
+                                <div class="col-xl-3 col-lg-6 col-12 form-group text-right">
+                                    <label> فعال / غیرفعال </label>
+                                    <label class="switch">
+                                        {{ form.active }}
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                {% endif %}
+                                <div class="col-xl-4 col-lg-6 col-12 form-group text-right">
+                                    <label> نمایش سوالات در صفحات جدا <span>*</span></label>
+                                    <label class="switch">
+                                        {{ form.show_quiz }}
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                {% if request.resolver_match.url_name == "quiz_update" %}
+                                <div class="col-xl-12 col-lg-12 col-12 form-group text-right">
+                                    <div class="btn-group">
+                                        {% for checkbox in form.students %}
+                                        <label class="btn btn-light m-3">
+                                            <div class="mt-3">
+                                                {{ checkbox.tag }} {{ checkbox.choice_label }}
+                                            </div>
+                                        </label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                                <div class="col-md-12">
+                                    {% if request.resolver_match.url_name == "quiz_create" %}
+                                    <button class="btn btn-success" type="submit">ساخت</button>
+                                    {% else %}
+                                    <button class="btn btn-warning" type="submit">ویرایش</button>
+                                    {% endif %}
+                                    <a href="{% url 'quiz:quiz_list' %}" class="btn btn-secondary">لغو</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% elif request.resolver_match.url_name == 'question_update' %}
+<div class="mt-5 m-3">
+    <div class="breadcrumbs-area">
+        <h3>ساخت آزمون</h3>
+    </div>
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="single-info-details">
+                <div class="item-content">
+                    <div class="content-inline item-content">
+                        <div class="new-added-form">
+                            <div class="row">
+                                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                    <label> نوع سوال <span>*</span></label>
+                                    <select name="question_type" id="id_question_type" disabled>
+                                        <option
+                                                {% if question.question_type == 'چهار گزینه ای'  %}selected{% endif %}
+                                        value="چهار گزینه ای" >چهار گزینه
+                                        ای</option>
+                                        <option {% if question.question_type == 'تشریحی' %}selected{% endif %}
+                                        value="تشریحی">تشریحی</option>
+                                    </select>
+                                </div>
+                                <div class="col-xl-9 col-lg-6 col-12 form-group"></div>
+                                <div class="col-xl-12 col-lg-6 col-12 form-group">
+                                    <label> عنوان سوال <span>*</span></label>
+                                    {{ form.media }}
+                                    {{ form.text }}
+                                </div>
+                                <div class="col-12" id="answers" style="display: none;">
+                                    <div class="card-body my-4 add_question">
+                                        <table class="add_answer">
+                                            <thead>
+                                            <tr>
+                                                <th>عنوان پاسخ</th>
+                                                <th>پاسخ درست</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for ans in question.answer_multi_question.all %}
+                                            <tr>
+                                                <td>
+                                                    <input type="text" class="Answer" value="{{ ans }}"
+                                                           id="{{ ans.id }}">
+                                                </td>
+                                                <td>
+                                                    <input type="radio" class="CorrectAnswer"
+                                                           name="correctAnswer" {% if ans.correct %}checked{%endif%}
+                                                           value="{{ ans.id }}">
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <button class="btn btn-success" id="edit_question"
+                                        data-id="{{ request.resolver_match.kwargs.pk }}">ویرایش
+                                </button>
+                                <a href="{% url 'quiz:quiz_questions_list' question.quiz.pk %}"
+                                   class="btn btn-secondary">برگشت</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

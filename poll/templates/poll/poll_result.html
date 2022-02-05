@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="m-2">
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        <h3>نتایج نظرسنجی</h3>
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <!-- Add New Teacher Area Start Here -->
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    {{ poll.question }}
+                    <hr>
+                </div>
+                {% for option in poll.poll_option.all %}
+                <div class="col-md-4">
+                    <h4>{{ option }} ----- <b>{{ option.option_count }} رای </b></h4>
+                </div>
+                <div class="col-md-8">
+                    <div class="progress mt-2" style="height: 20px;">
+                        <div class="progress-bar bg-info" role="progressbar"
+                             style="width: {{ option.option_count }}cm" aria-valuenow="{{ option.option_count }}"
+                             aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+                {% endfor %}
+                <a href="{% url 'poll:poll_list' %}" class="btn btn-secondary">برگشت</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

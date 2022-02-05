@@ -1,0 +1,111 @@
+@media (min-width: 320px) and (max-width: 824px) {
+    .container2:hover .top:before, .container2:hover .top:after, .container2:hover .bottom:before, .container2:hover .bottom:after, .container2:active .top:before, .container2:active .top:after, .container2:active .bottom:before, .container2:active .bottom:after {
+      margin-left: 170px;
+      transform-origin: -170px 50%;
+      transition-delay: 0s;
+    }
+    .center input {
+      width: 300px;
+      padding: 15px;
+      margin: 5px;
+      font-family: inherit;
+      font-size: 20px ;
+    }
+
+    .center h2 {
+        font-size: 20px ;
+        margin-bottom: 20px;
+        margin-top: 40px ;
+    }
+
+    .center button {
+        font-size: 25px;
+        margin-top: 20px;
+    }
+    .fc-button{
+        display:none;
+    }
+    .fc-toolbar h2{
+        font-size:18px ;
+        margin:5px 0 -10px 0;
+    }
+    th.fc-day-header.fc-widget-header.fc-sat span{
+        display:none;
+    }
+    th.fc-day-header.fc-widget-header.fc-sun span{
+        display:none;
+    }
+    th.fc-day-header.fc-widget-header.fc-mon span{
+        display:none;
+    }
+    th.fc-day-header.fc-widget-header.fc-tue span{
+        display:none;
+    }
+    th.fc-day-header.fc-widget-header.fc-wed span{
+        display:none;
+    }
+    th.fc-day-header.fc-widget-header.fc-thu span{
+        display:none;
+    }
+    th.fc-day-header.fc-widget-header.fc-fri span{
+        display:none;
+    }
+
+    th.fc-day-header.fc-widget-header.fc-sat:after{
+        content:"ش" !important;
+    }
+    th.fc-day-header.fc-widget-header.fc-sun:after{
+        content:"ی" !important;
+    }
+    th.fc-day-header.fc-widget-header.fc-mon:after{
+        content:"د" !important;
+    }
+    th.fc-day-header.fc-widget-header.fc-tue:after{
+        content:"س" !important;
+    }
+    th.fc-day-header.fc-widget-header.fc-wed:after{
+        content:"چ" !important;
+    }
+    th.fc-day-header.fc-widget-header.fc-thu:after{
+        content:"پ" !important;
+    }
+    th.fc-day-header.fc-widget-header.fc-fri:after{
+        content:"ج" !important;
+    }
+
+
+
+}
+@media (max-width: 400px) {
+    .container2:hover .top:before, .container2:hover .top:after, .container2:hover .bottom:before, .container2:hover .bottom:after, .container2:active .top:before, .container2:active .top:after, .container2:active .bottom:before, .container2:active .bottom:after {
+      margin-left: 140px;
+      transform-origin: -140px 50%;
+      transition-delay: 0s;
+    }
+
+    .center input {
+      width: 260px;
+      padding: 15px;
+      margin: 5px;
+      font-family: inherit;
+      font-size: 15px ;
+    }
+
+    .center h2 {
+        font-size: 18px ;
+        margin-bottom: 10px;
+        margin-top: 45px ;
+    }
+
+    .center button {
+        font-size: 25px;
+        margin-top: 15px;
+    }
+    .fc-button{
+        display:none;
+    }
+    .fc-toolbar h2{
+        font-size:17px ;
+        margin:5px 0 -10px 0;
+    }
+}

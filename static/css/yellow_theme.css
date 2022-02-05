@@ -1,0 +1,202 @@
+::selection{
+    background:#fff398;
+    color: #2d2d2d;
+}
+.bottom:before{
+    background: #2d2d2d;
+}
+.bottom:after{
+    background: #f3c900;
+}
+.top:before {
+  background: #f3c900;
+}
+.top:after {
+  background: #2d2d2d;
+}
+.nav-bar-header-one{
+    background: #f3c900;
+}
+.treeview-animated-items .active2{
+    background-color: #f3c900;
+}
+.treeview-animated-items .active2:hover{
+      color: #3b3b3b;
+      background-color: #ffed97;
+}
+.sidenav{
+  background-color: #2d2d2d;
+}
+.fc-dayGridMonth-button::after{
+    background-color: #2d2d2d !important;
+    border-color: #2d2d2d;
+}
+.fc-timeGridWeek-button::after{
+    background-color: #2d2d2d !important;
+    border-color: #2d2d2d;
+}
+.fc-timeGridDay-button::after{
+    background-color: #2d2d2d !important;
+    border-color: #2d2d2d;
+}
+.fc-button-primary{
+    background-color: #2d2d2d !important;
+    border-color: #2d2d2d;
+}
+.fc-button-primary:not(:disabled).fc-button-active, .fc-button-primary:not(:disabled):active{
+    background-color: #f3c900 !important;
+    border-color: #f3c900;
+}
+.header-main-menu .navbar-nav .header-admin .dropdown-menu .item-header{
+  background-color: #f3c900;
+}
+.header-main-menu .navbar-nav .header-admin .dropdown-menu .item-header .item-title{
+    color: #2d2d2d;
+}
+.breadcrumbs-area ul li{
+  color: #f3c900;
+}
+.center input:focus{
+  border: 2px solid #f3c900;
+}
+.center button{
+    background-color:#f3c900;
+    color: #2d2d2d !important;
+    transition: 0.3s;
+}
+.center button:hover{
+    background-color:#fff5ad !important;
+    color: #2d2d2d !important;
+}
+.theme_color i{
+    color: #ffc107;
+}
+.theme_color .item-icon{
+    background-color: #fff7e8;
+}
+.theme_color .post-date{
+    background-color:#f3c900 ;
+    color: #2d2d2d !important;
+}
+.add_notice input:focus{
+    border: 2px solid #f3c900;
+}
+.add_notice textarea:focus{
+    border: 2px solid #f3c900;
+}
+.add_question input:focus{
+    border: 2px solid #f3c900;
+}
+.submit-notice{
+    background: #f3c900;
+    color: #2d2d2d;
+}
+.treeview-animated-items .open{
+    background-color: #f3c900;
+    color: #2d2d2d;
+}
+.treeview-animated-items .open:hover {
+    background-color: #ffed93;
+    color: #2d2d2d;
+}
+.dashboard-card-four ::-webkit-scrollbar-thumb {
+    background: #f3c900;
+}
+.dashboard-card-six ::-webkit-scrollbar-thumb {
+  background: #f3c900;
+}
+.theme_color .fw-btn-fill{
+    background: #f3c900;
+    color: #2d2d2d;
+}
+.theme_color .fw-btn-fill:hover{
+    background: #2d2d2d;
+    color: #fff;
+}
+.user_list .search_btn{
+    background: #f3c900;
+    color: #2d2d2d;
+}
+.user_list .search_btn:hover{
+    background: #2d2d2d;
+    color: #fff;
+}
+.user_list a:hover{
+    color:#f3c900;
+}
+.single-info-details .item-content .item-header .header-elements ul li a:hover {
+  background-color: #f3c900;
+  color: #fff;
+}
+.new-added-form input:focus {
+  border: 2px solid #f3c900;
+}
+.new-added-form textarea:focus {
+  border: 2px solid #f3c900;
+}
+.new-added-form .submit-form-btn {
+  background: #f3c900;
+  color: #2d2d2d;
+  transition: 0.3s;
+}
+.new-added-form .submit-form-btn:hover {
+  background: #ffe494;
+  color: #2d2d2d;
+}
+.new-added-form .reset-form-btn {
+  background: #2d2d2d;
+  color: #fff;
+  transition: 0.3s;
+}
+.new-added-form .reset-form-btn:hover {
+  background: #c1c1c1;
+  color: #2d2d2d;
+}
+.search-form-box input:focus {
+    border: 1px solid #f3c900;
+}
+.attendance-table th{
+    background-color: #fff6b8;
+}
+.attendance-table a:hover {
+    color: #f3c900;
+}
+a {
+    color: #f3c900;
+}
+.vote-btn{
+    background-color: #f3c900;
+    color: #2d2d2d;
+}
+.vote-btn:hover{
+    color: #fff !important;
+    background-color: #2d2d2d;
+}
+.result-btn{
+    border: 1px solid #f3c900;
+    background-color: transparent;
+    color: #2d2d2d;
+}
+.result-btn:hover{
+    color: #2d2d2d !important;
+    background-color: #f3c900;
+}
+.breadcrumbs-area a{
+    border: 1px solid #f3c900;
+    background-color: #f3c900;
+    color: #2d2d2d;
+    display: inline;
+}
+.breadcrumbs-area a:hover{
+    border: 1px solid #f3c900;
+    color: #2d2d2d;
+    background-color: transparent;
+}
+.start-quiz-btn {
+    background-color: #f3c900;
+    color: #2d2d2d;
+}
+.start-quiz-btn:hover {
+    background-color: #2d2d2d;
+    color: #fff;
+}

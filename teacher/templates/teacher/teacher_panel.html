@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<!-- Breadcubs Area Start Here -->
+<div class="breadcrumbs-area">
+    <h3>داشبورد دبیر</h3>
+    <ul>
+        <li>{{ request.user.get_full_name }}</li>
+    </ul>
+</div>
+<!-- Breadcubs Area End Here -->
+<div class="row">
+    <!-- Dashboard summery Start Here -->
+    <div class="col-12 col-4-xxxl">
+        <div class="row">
+            <div class="col-6-xxxl col-lg-3 col-sm-6 col-12">
+                <div class="dashboard-summery-two theme_color">
+                    <div class="item-icon">
+                        <i class="flaticon-classmates text-magenta"></i>
+                    </div>
+                    <div class="item-content">
+                        <div class="item-number"><span class="counter">{{ User_count.student_count }}</span></div>
+                        <div class="item-title">مجموع دانش آموزان</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6-xxxl col-lg-3 col-sm-6 col-12">
+                <div class="dashboard-summery-two theme_color">
+                    <div class="item-icon">
+                        <i class="flaticon-shopping-list"></i>
+                    </div>
+                    <div class="item-content">
+                        <div class="item-number"><span class="counter">{{ Quiz_count }}</span></div>
+                        <div class="item-title">مجموع امتحانات</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6-xxxl col-lg-3 col-sm-6 col-12">
+                <div class="dashboard-summery-two theme_color">
+                    <div class="item-icon">
+                        <i class="flaticon-mortarboard"></i>
+                    </div>
+                    <div class="item-content">
+                        <div class="item-number"><span class="counter">{{ request.user.education }}</span></div>
+                        <div class="item-title">تحصیلات تکمیلی</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6-xxxl col-lg-3 col-sm-6 col-12">
+                <div class="dashboard-summery-two theme_color">
+                    <div class="item-icon">
+                        <i class="flaticon-money"></i>
+                    </div>
+                    <div class="item-content">
+                        <div class="item-number">
+<!--                            <span>تومان</span><span class="counter"-->
+<!--                                                    data-num="2102050">21,02,050</span>-->
+                            <span class="text-danger"><b>بزودی</b></span>
+                        </div>
+                        <div class="item-title">درآمد کلی</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Dashboard summery End Here -->
+    <div class="col-12">
+        <!-- Class Table Area Start Here -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card dashboard-card-eleven">
+                    <div class="card-body user_list">
+                        <div class="heading-layout1">
+                            <div class="item-title">
+                                <h3>لیست کلاس های من</h3>
+                            </div>
+                        </div>
+                        <div class="table-box-wrap">
+                            <form class="search-form-box">
+                                <div class="row gutters-8">
+                                    <div class="col-3-xxxl col-xl-3 col-lg-3 col-12 form-group">
+                                        <span class="small mb-1">فیلتر بر اساس مقطع</span>
+                                        <div class="d-block">
+                                            {{ filter.form.grade }}
+                                        </div>
+                                    </div>
+                                    {% if majors %}
+                                    <div class="col-lg-3 col-12 form-group">
+                                        <span class="small mb-1">فیلتر بر اساس رشته</span>
+                                        <div class="d-block">
+                                             {{ filter.form.major }}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <span class="small mb-1">جستجو بر اساس نام</span>
+                                        </div>
+                                        <div class="col-lg-5 col-6 form-group">
+                                            <input type="text" name="name" placeholder="جستجو ..." id="id_name">
+                                        </div>
+                                        <div class="col-lg-3 col-6 form-group">
+                                            <button type="submit" class="btn search_btn">جستجو
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="table-responsive student-table-box">
+                                <table class="table display data-table text-nowrap">
+                                    <thead>
+                                    <tr>
+                                        <th>نام کلاس</th>
+                                        <th>مقطع</th>
+                                        {% if majors %}
+                                        <th>رشته</th>
+                                        {% endif %}
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for class in filter.qs %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'main:class_detail' class.pk %}">{{ class.name }}</a>
+                                        </td>
+                                        <td>{{ class.grade }}</td>
+                                        {% if majors %}
+                                        <td>{{ class.major }}</td>
+                                        {% endif %}
+                                        <td>
+                                            <div class="dropdown">
+                                                <a href="#" class="dropdown-toggle"
+                                                   data-toggle="dropdown" aria-expanded="false">
+                                                                        <span
+                                                                                class="flaticon-more-button-of-three-dots"></span>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" href="{% url 'main:class_detail' class.pk %}"><i
+                                                            class="fas fa-cogs text-dark-pastel-green"></i>جزئیات</a>
+                                                    <a class="dropdown-item" href="{% url 'teacher:teacher_panel' %}"><i
+                                                            class="fas fa-redo-alt text-orange-peel"></i>تازه کردن</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Class Table Area End Here -->
+    </div>
+    <!-- Students Chart End Here -->
+    <div class="col-lg-6 col-xl-6">
+        {% include 'event_calendar.html' %}
+    </div>
+    <!-- Students Chart End Here -->
+    <!-- Notice Board Start Here -->
+    <div class="col-lg-6 col-xl-6">
+        {% include 'notice_boxes.html' %}
+    </div>
+    <!-- Notice Board End Here -->
+</div>
+{% endblock %}

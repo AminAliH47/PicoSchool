@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+<!-- Breadcubs Area Start Here -->
+<div class="breadcrumbs-area">
+    <h3>داشبورد دانش آموزان</h3>
+    <ul>
+        <li>{{ request.user.get_full_name }}</li>
+    </ul>
+</div>
+<!-- Breadcubs Area End Here -->
+<div class="row">
+    <!-- Student Info Area Start Here -->
+    <div class="col-4-xxxl col-12">
+        <div class="card dashboard-card-ten">
+            <div class="card-body">
+                <div class="heading-layout1">
+                    <div class="item-title">
+                        <h3>درباره من</h3>
+                    </div>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                           aria-expanded="false">...</a>
+
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="{% url 'main:student_detail' request.user.pk %}"><i
+                                    class="fas fa-cogs text-dark-pastel-green"></i>نمایش اطلاعات</a>
+                            <a class="dropdown-item" href=""><i
+                                    class="fas fa-redo-alt text-orange-peel"></i>تازه کردن</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="student-info">
+                    <div class="media media-none--xs">
+                        <div class="item-img">
+                            {% if request.user.profile_img %}
+                            <img src="{{ request.user.profile_img.url }}" class="media-img-auto"
+                                 alt="{{ request.user.national_code }}">
+                            {% else %}
+                            <img src="{% static 'img/user_image.png' %}" class="student_img media-img-auto"
+                                 width="110px"
+                                 alt="{{ request.user.national_code }}">
+                            {% endif %}
+                        </div>
+                        <div class="media-body">
+                            <a href="{% url 'main:student_detail' request.user.pk %}">
+                                <h3 class="item-title">{{ request.user.get_full_name }}</h3>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="table-responsive info-table">
+                        <table class="table text-nowrap">
+                            <tbody>
+                            <tr>
+                                <td>نام و نام خانوادگی:</td>
+                                <td class="font-medium text-dark-medium">{{ request.user.get_full_name }}</td>
+                            </tr>
+                            <tr>
+                                <td>نام پدر:</td>
+                                <td class="font-medium text-dark-medium">{{ request.user.father_name }}</td>
+                            </tr>
+                            <tr>
+                                <td>تاریخ تولد:</td>
+                                <td class="font-medium text-dark-medium">{{ request.user.date_of_birth }}</td>
+                            </tr>
+                            <tr>
+                                <td>تلفن:</td>
+                                {% if request.user.phone %}
+                                <td class="font-medium text-dark-medium">{{ request.user.phone }}</td>
+                                {% else %}
+                                <td class="font-medium text-dark-medium">ندارد</td>
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <td>تلفن منزل:</td>
+                                <td class="font-medium text-dark-medium">{{ request.user.home_phone }}</td>
+                            </tr>
+                            <tr>
+                                <td><a href="{% url 'main:student_detail' request.user.pk %}" class="btn btn-secondary">اطلاعات
+                                    بیشتر</a></td>
+                                <td><a href="{% url 'account:change_password' %}" class="btn btn-warning">تغییر
+                                    گذرواژه</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Student Info Area End Here -->
+    <div class="col-8-xxxl col-12">
+        <div class="row">
+            <!-- Summery Area Start Here -->
+            <div class="col-lg-4">
+                <div class="dashboard-summery-one theme_color">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="item-icon">
+                                <i class="flaticon-shopping-list"></i>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="item-content">
+                                <div class="item-title">اطلاعیه</div>
+                                <div class="item-number"><span class="counter" data-num="12">
+                                    {% if count_notice_header %}{{ count_notice_header.count }}{% else %}0{% endif %}
+                                </span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="dashboard-summery-one theme_color">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="item-icon">
+                                <i class="flaticon-calendar"></i>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="item-content">
+                                <div class="item-title">رویداد</div>
+                                <div class="item-number"><span class="counter">
+                                    {% if event_count %}{{ event_count.count }}{% else %}0{% endif %}
+                                </span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="dashboard-summery-one theme_color">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="item-icon">
+                                <i class="flaticon-percentage-discount"></i>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="item-content">
+                                <div class="item-title">حضور</div>
+                                <div class="item-number"><span class="counter">{{ present }}</span><span>%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Summery Area End Here -->
+            <!-- Exam Result Area Start Here -->
+            <div class="col-lg-12">
+                <div class="card dashboard-card-eleven">
+                    <div class="card-body">
+                        <div class="heading-layout1">
+                            <div class="item-title">
+                                <a href="{% url 'quiz:result_list' %}"><h3>نتایج آزمون</h3></a>
+                            </div>
+                        </div>
+                        <div class="table-box-wrap">
+                            <div class="table-responsive result-table-box">
+                                <table class="table display data-table text-nowrap">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                        </th>
+                                        <th>نام آزمون</th>
+                                        <th>موضوع</th>
+                                        <th>کلاس</th>
+                                        <th>کتاب</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for result in results %}
+                                    <tr>
+                                        <td>
+                                            {{ result.pk }}
+                                        </td>
+                                        <td>{{ result.quiz }}</td>
+                                        <td>{{ result.quiz.topic }}</td>
+                                        <td>{{ result.quiz.quiz_class }}</td>
+                                        <td>{{ result.quiz.quiz_book }}</td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <a href="#" class="dropdown-toggle"
+                                                   data-toggle="dropdown" aria-expanded="false">
+                                                                        <span
+                                                                                class="flaticon-more-button-of-three-dots"></span>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item"
+                                                       href="{% url 'quiz:result_detail' result.pk request.user.pk %}"><i
+                                                            class="fas fa-cogs text-dark-pastel-green"></i>جزئیات</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Exam Result Area End Here -->
+        </div>
+    </div>
+    <div class="col-4-xxxl col-xl-6 col-12">
+        {% include 'student_status.html' %}
+    </div>
+    <div class="col-4-xxxl col-xl-6 col-12">
+        {% include 'event_calendar.html' %}
+    </div>
+    <div class="col-4-xxxl col-12">
+        {% include 'notice_boxes.html' %}
+    </div>
+</div>
+{% block js_files %}
+<!-- Chart Js -->
+<script src="{% static 'js/chart.min.js' %}"></script>
+<script src="{% static 'js/student_chart.js' %}"></script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,516 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+<div class="m-2">
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        {% if request.resolver_match.url_name == "student_create" %}
+        <h3>اضافه کردن دانش آموز جدید</h3>
+        {% elif request.resolver_match.url_name == "student_update" %}
+        <h3>ویرایش دانش آموز</h3>
+        {% elif request.resolver_match.url_name == "parent_create" %}
+        <h3>اضافه کردن والد یا قیم جدید</h3>
+        {% elif request.resolver_match.url_name == "parent_update" %}
+        <h3>ویرایش والد یا قیم</h3>
+        {% elif request.resolver_match.url_name == "teacher_create" %}
+        <h3>اضافه کردن دبیر جدید</h3>
+        {% elif request.resolver_match.url_name == "teacher_update" %}
+        <h3>ویرایش دبیر</h3>
+        {% endif %}
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <!-- Add New Teacher Area Start Here -->
+    <div class="card height-auto">
+        <div class="card-body">
+            <form class="new-added-form" method="post" autocomplete="off" enctype="multipart/form-data"
+                  id="create_student_form">{% csrf_token %}
+                {% if request.resolver_match.url_name == "student_create" or request.resolver_match.url_name == "student_update" %}
+                <div class="row">
+                    <div class="col-lg-12 col-12">
+                        <p class="form-group-title">اطلاعات عمومی</p>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> نام <span>*</span></label>
+                        {{ form.first_name }}
+                        {% for error in form.first_name.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> نام خانوادگی <span>*</span></label>
+                        {{ form.last_name }}
+                        {% for error in form.last_name.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> کدملی <span>*</span></label>
+                        {{ form.national_code }}
+                        {% for error in form.national_code.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> تاریخ تولد <span>*</span></label>
+                        {{ form.date_of_birth }}
+                        {% for error in form.date_of_birth.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> نام پدر <span>*</span></label>
+                        {{ form.father_name }}
+                        {% for error in form.father_name.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> حساب والدین <span>*</span></label>
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle Parent_dropdown Chose_dropdown" type="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    id="ParentDropdown">
+                                والدین انتخاب
+                            </button>
+                            <div class="dropdown-menu text-right p-2"
+                                 aria-labelledby="dropdownMenuButton">
+                                <div>
+                                    <input type="text" id="search" name="search" placeholder="جستجو کنید..."
+                                           class="searchInput"
+                                           onkeyup="filter()">
+                                </div>
+                                <div class="search-select">
+                                    {{ form.parent }}
+                                </div>
+                            </div>
+                        </div>
+                        {% for error in form.parent.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-12 col-12">
+                        <p class="form-group-title">تلفن ها</p>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label>تلفن همراه</label>
+                        {{ form.phone }}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> تلفن منزل <span>*</span></label>
+                        {{ form.home_phone }}
+                        {% for error in form.home_phone.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-6 col-12 form-group"></div>
+                    <div class="col-lg-12 col-12">
+                        <p class="form-group-title">اطلاعات تحصیلی</p>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> مقطع تحصیلی <span>*</span></label>
+                        {{ form.grade }}
+                        {% for error in form.grade.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% if majors %}
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> رشته تحصیلی <span>*</span></label>
+                        {{ form.major }}
+                        {% for error in form.major.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> نام کلاس <span>*</span></label>
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle Class_dropdown Chose_dropdown" type="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    id="ClassDropdown">
+                                کلاس انتخاب
+                            </button>
+                            <div class="dropdown-menu text-right p-2"
+                                 aria-labelledby="dropdownMenuButton">
+                                <div>
+                                    <input type="text" id="search_cs" name="search" placeholder="جستجو کنید..."
+                                           class="searchInput"
+                                           onkeyup="filter2()">
+                                </div>
+                                <div class="search-select">
+                                    {{ form.student_class }}
+                                </div>
+                            </div>
+                        </div>
+                        {% for error in form.student_class.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-6 col-12 form-group"></div>
+                    <div class="col-lg-12 col-12">
+                        <p class="form-group-title">آدرس</p>
+                    </div>
+                    <div class="col-lg-6 col-12 form-group">
+                        <label>آدرس</label>
+                        {{ form.address }}
+                        {% for error in form.address.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-6 col-12 form-group"></div>
+                    <div class="col-lg-12 col-12">
+                        <p class="form-group-title">بیشتر</p>
+                    </div>
+                    <div class="col-lg-6 col-12 form-group mg-t-30">
+                        <label class="text-dark-medium">آپلود عکس دانش آموز (150px X 150px)</label>
+                        {{ form.profile_img }}
+                    </div>
+                    {% if request.resolver_match.url_name == "student_create" %}
+                    <div class="col-lg-6 col-12 form-group mg-t-30">
+                        <label> گذرواژه دانش آموز <span>*</span></label>
+                        {{ form.password }}
+                        {% for error in form.password.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% elif request.resolver_match.url_name == "student_update" %}
+                    <div class="col-lg-6 col-12 form-group mg-t-30">
+                        <label> گذرواژه دانش آموز </label>
+                        <a href="{% url 'manager:user_password' person.pk %}" class="btn btn-warning">تغییر گذرواژه</a>
+                    </div>
+                    {% endif %}
+                    <!--                    <div class="col-lg-6 col-12 d-none">-->
+                    <!--                        <input type="text" class="d-none" required id="id_parent">-->
+                    <!--                        <input type="text" class="d-none" required id="id_grade">-->
+                    <!--                        <input type="text" class="d-none" required id="id_major">-->
+                    <!--                    </div>-->
+                    <div class="col-12 form-group mg-t-8">
+                        <button type="submit" class="btn-fill-lg submit-form-btn">ذخیره</button>
+                        <a href="{% url 'manager:student_list' %}" class="btn-fill-lg reset-form-btn">برگشت</a>
+                        {% if request.resolver_match.url_name == "student_update" %}
+                        <a href="{% url 'manager:student_delete' person.pk %}"
+                           class="btn btn-danger float-left p-3">حذف</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% elif request.resolver_match.url_name == "parent_create" or request.resolver_match.url_name == "parent_update" %}
+                <div class="row">
+                    <div class="col-lg-12 col-12">
+                        <p class="form-group-title">اطلاعات عمومی</p>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> نام <span>*</span></label>
+                        {{ form.first_name }}
+                        {% for error in form.first_name.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> نام خانوادگی <span>*</span></label>
+                        {{ form.last_name }}
+                        {% for error in form.last_name.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> کدملی <span>*</span></label>
+                        {{ form.national_code }}
+                        {% for error in form.national_code.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> تاریخ تولد <span>*</span></label>
+                        {{ form.date_of_birth }}
+                        {% for error in form.date_of_birth.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-12 col-12">
+                        <p class="form-group-title">تلفن ها</p>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> تلفن همراه <span>*</span></label>
+                        {{ form.phone }}
+                        {% for error in form.phone.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> تلفن منزل <span>*</span></label>
+                        {{ form.home_phone }}
+                        {% for error in form.home_phone.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> تلفن محل کار </label>
+                        {{ form.work_phone }}
+                        {% for error in form.work_phone.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+
+                    </div>
+                    <div class="col-lg-12 col-12">
+                        <p class="form-group-title">شغل و تحصیلات</p>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> شغل <span>*</span></label>
+                        {{ form.job }}
+                        {% for error in form.job.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> تحصیلات <span>*</span></label>
+                        {{ form.education }}
+                        {% for error in form.education.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-6 col-12 form-group">
+                    </div>
+                    <div class="col-lg-12 col-12">
+                        <p class="form-group-title">آدرس ها</p>
+                    </div>
+                    <div class="col-lg-6 col-12 form-group">
+                        <label> آدرس منزل <span>*</span></label>
+                        {{ form.address }}
+                        {% for error in form.address.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-6 col-12 form-group">
+                        <label> آدرس محل کار </label>
+                        {{ form.work_address }}
+                        {% for error in form.work_address.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-12 col-12">
+                        <p class="form-group-title">بیشتر</p>
+                    </div>
+                    <div class="col-lg-6 col-12 form-group mg-t-30">
+                        <label class="text-dark-medium">آپلود عکس (150px X 150px)</label>
+                        {{ form.profile_img }}
+                    </div>
+                    {% if request.resolver_match.url_name == "parent_create" %}
+                    <div class="col-lg-6 col-12 form-group mg-t-30">
+                        <label> گذرواژه والدین <span>*</span></label>
+                        {{ form.password }}
+                        {% for error in form.password.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% elif request.resolver_match.url_name == "parent_update" %}
+                    <div class="col-lg-6 col-12 form-group mg-t-30">
+                        <label> گذرواژه والدین </label>
+                        <a href="{% url 'manager:user_password' person.pk %}" class="btn btn-warning">تغییر گذرواژه</a>
+                    </div>
+                    {% endif %}
+                    <!--                    <div class="col-lg-6 col-12 d-none">-->
+                    <!--                        <input type="text" class="d-none" required id="id_parent">-->
+                    <!--                        <input type="text" class="d-none" required id="id_grade">-->
+                    <!--                        <input type="text" class="d-none" required id="id_major">-->
+                    <!--                    </div>-->
+                    <div class="col-12 form-group mg-t-8">
+                        <button type="submit" class="btn-fill-lg submit-form-btn">ذخیره</button>
+                        <a href="{% url 'manager:parent_list' %}" class="btn-fill-lg reset-form-btn">برگشت</a>
+                        {% if request.resolver_match.url_name == "parent_update" %}
+                        <a href="{% url 'manager:parent_delete' person.pk %}"
+                           class="btn btn-danger float-left p-3">حذف</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% elif request.resolver_match.url_name == "teacher_create" or request.resolver_match.url_name == "teacher_update" %}
+                <div class="row">
+                    <div class="col-lg-12 col-12">
+                        <p class="form-group-title">اطلاعات عمومی</p>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> نام <span>*</span></label>
+                        {{ form.first_name }}
+                        {% for error in form.first_name.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> نام خانوادگی <span>*</span></label>
+                        {{ form.last_name }}
+                        {% for error in form.last_name.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> کدملی <span>*</span></label>
+                        {{ form.national_code }}
+                        {% for error in form.national_code.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> شماره شناسنامه <span>*</span></label>
+                        {{ form.certificate_code }}
+                        {% for error in form.certificate_code.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> مجرد یا متاهل <span>*</span></label>
+                        {{ form.single_or_married }}
+                        {% for error in form.date_of_birth.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> تاریخ تولد <span>*</span></label>
+                        {{ form.date_of_birth }}
+                        {% for error in form.date_of_birth.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-12" style="display: none;" id="spouse_info">
+                        <div class="row">
+                            <div class="col-lg-12 col-12">
+                                <p class="form-group-title">اطلاعات همسر</p>
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-12 form-group">
+                                <label> نام و نام خانوادگی همسر <span>*</span></label>
+                                {{ form.spouse_fullname }}
+                                {% for error in form.spouse_fullname.errors %}
+                                <p class="text-danger">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-12 form-group">
+                                <label> تلفن همسر <span>*</span></label>
+                                {{ form.spouse_phone }}
+                                {% for error in form.spouse_phone.errors %}
+                                <p class="text-danger">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-12 form-group">
+                                <label> تعداد فرزندان <span>*</span></label>
+                                {{ form.child_num }}
+                                {% for error in form.child_num.errors %}
+                                <p class="text-danger">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-12">
+                        <p class="form-group-title">اطلاعات تحصیلی و شغلی</p>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> تحصیلات <span>*</span></label>
+                        {{ form.education }}
+                        {% for error in form.education.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> دانشگاه محل تحصیل <span>*</span></label>
+                        {{ form.university }}
+                        {% for error in form.university.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> تعداد ساعت های کار <span>*</span></label>
+                        {{ form.working_hours }}
+                        {% for error in form.working_hours.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> حقوق پایه <span>*</span></label>
+                        {{ form.basic_salary }}
+                        {% for error in form.basic_salary.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> وضعیت <span>*</span></label>
+                        {{ form.status }}
+                        {% for error in form.status.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-12 col-12">
+                        <p class="form-group-title">تلفن ها</p>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> تلفن همراه <span>*</span></label>
+                        {{ form.phone }}
+                        {% for error in form.phone.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label> تلفن منزل <span>*</span></label>
+                        {{ form.home_phone }}
+                        {% for error in form.home_phone.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                    </div>
+                    <div class="col-lg-12 col-12">
+                        <p class="form-group-title">آدرس</p>
+                    </div>
+                    <div class="col-lg-6 col-12 form-group">
+                        <label> آدرس منزل <span>*</span></label>
+                        {{ form.address }}
+                        {% for error in form.address.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-12 col-12">
+                        <p class="form-group-title">بیشتر</p>
+                    </div>
+                    <div class="col-lg-6 col-12 form-group mg-t-30">
+                        <label class="text-dark-medium">آپلود عکس (150px X 150px)</label>
+                        {{ form.profile_img }}
+                    </div>
+                    {% if request.resolver_match.url_name == "teacher_create" %}
+                    <div class="col-lg-6 col-12 form-group mg-t-30">
+                        <label> گذرواژه دبیر <span>*</span></label>
+                        {{ form.password }}
+                        {% for error in form.password.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% elif request.resolver_match.url_name == "teacher_update" %}
+                    <div class="col-lg-6 col-12 form-group mg-t-30">
+                        <label> گذرواژه دبیر </label>
+                        <a href="{% url 'manager:user_password' person.pk %}" class="btn btn-warning">تغییر گذرواژه</a>
+                    </div>
+                    {% endif %}
+                    <!--                    <div class="col-lg-6 col-12 d-none">-->
+                    <!--                        <input type="text" class="d-none" required id="id_parent">-->
+                    <!--                        <input type="text" class="d-none" required id="id_grade">-->
+                    <!--                        <input type="text" class="d-none" required id="id_major">-->
+                    <!--                    </div>-->
+                    <div class="col-12 form-group mg-t-8">
+                        <button type="submit" class="btn-fill-lg submit-form-btn">ذخیره</button>
+                        <a href="{% url 'manager:teacher_list' %}" class="btn-fill-lg reset-form-btn">برگشت</a>
+                        {% if request.resolver_match.url_name == "parent_update" %}
+                        <a href="{% url 'manager:teacher_delete' person.pk %}"
+                           class="btn btn-danger float-left p-3">حذف</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock main %}
+
+
+{% block js_files %}
+<script src='{% static "js/parent_dropdown.js" %}'></script>
+<script src='{% static "js/single_or_married_dp.js" %}'></script>
+{% endblock js_files %}

@@ -1,0 +1,374 @@
+<div id="mySidenav" class="sidenav noPrint">
+    <div class="hide_de" style="margin-top: 60px;"></div>
+    <ul class="treeview-animated-list mb-3">
+        <li>
+            <a href="{% url 'account:login' %}">
+                <div class="treeview-animated-element {% if request.resolver_match.url_name == 'parent_panel' or request.resolver_match.url_name == 'teacher_panel' or request.resolver_match.url_name == 'student_panel' %}opened{% endif %}">
+                    <i class="fas fa-tachometer-alt ic-w mx-2"></i>داشبورد
+                </div>
+            </a>
+        </li>
+        {% if request.user.is_superuser or request.user.is_manager or request.user.is_teacher %}
+        <li class="treeview-animated-items">
+            <a class="closed {% if request.resolver_match.url_name == 'notices' %}active2{% endif %}">
+                <span><i class="far fa-bell ic-w mx-2"></i>اعلانات</span>
+                <i class="fas fa-angle-right"></i>
+            </a>
+            <ul class="nested">
+                <li>
+                    <a href="{% url 'main:notices' %}">
+                        <div class="treeview-animated-element {% if request.resolver_match.url_name == 'notices' %}activate{% endif %}">
+                            <i class="fas fa-bell ic-w mx-2"></i>تابلو اعلانات
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#notices_modal">
+                        <div class="treeview-animated-element"><i class="fas fa-plus ic-w mx-2"></i>اعلان جدید
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        {% else %}
+        <li>
+            <a href="{% url 'main:notices' %}">
+                <div class="treeview-animated-element {% if request.resolver_match.url_name == 'notices' %}opened{% endif %}">
+                    <i class="fas fa-bell ic-w mx-2"></i>اعلانات
+                </div>
+            </a>
+        </li>
+        {% endif %}
+        <li>
+            <a href="{% url 'main:events' %}">
+                <div class="treeview-animated-element {% if request.resolver_match.url_name == 'events' %}opened{% endif %}">
+                    <i class="far fa-calendar-alt ic-w mx-2"></i>رویداد ها
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'main:news_list' %}">
+                <div class="treeview-animated-element {% if request.resolver_match.url_name == 'news_list' %}opened{% endif %}">
+                    <i class="fas fa-newspaper ic-w mx-2"></i>اخبار آموزش و پرورش
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'poll:poll_list' %}">
+                {% if request.user.is_superuser or request.user.is_manager %}
+                <div class="count-num"><span>{{ poll.all_count }}</span></div>
+                {% endif %}
+                <div class="treeview-animated-element {% if request.resolver_match.url_name == 'poll_list' %}opened{% endif %}">
+                    <i class="fas fa-poll ic-w mx-2"></i>فهرست نظرسنجی
+                </div>
+            </a>
+        </li>
+        {% if request.user.is_superuser or request.user.is_manager %}
+        <li class="mt-4 mx-4">
+            <div>برای مدیران</div>
+        </li>
+        <li>
+            <a href="{% url 'main:employment_form_list' %}">
+                {% if request.user.is_superuser or request.user.is_manager %}
+                <div class="count-num"><span>{{ employment_form.all_count }}</span></div>
+                {% endif %}
+                <div class="treeview-animated-element {% if request.resolver_match.url_name == 'employment_form_list' or request.resolver_match.url_name == 'employment_form_detail' %}opened{% endif %}">
+                    <i class="fas fa-list ic-w mx-2"></i>فرم های درخواست شده
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'manager:calendar' %}">
+                <div class="treeview-animated-element {% if request.resolver_match.url_name == 'calendar' %}opened{% endif %}">
+                    <i class="fas fa-calendar ic-w mx-2"></i>تقویم رویدادها
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'main:class_list' %}">
+                <div class="treeview-animated-element {% if request.resolver_match.url_name == 'class_list' or request.resolver_match.url_name == 'class_detail' or request.resolver_match.url_name == 'attendance_detail' %}opened{% endif %}">
+                    <i class="fas fa-chalkboard ic-w mx-2"></i>فهرست کلاس ها
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'main:home_work_list' %}">
+                <div class="treeview-animated-element {% if request.resolver_match.url_name == 'home_work_list' or request.resolver_match.url_name == 'home_work_detail' %}opened{% endif %}">
+                    <i class="fas fa-book ic-w mx-2"></i>فهرست تکالیف
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'poll:poll_create' %}">
+                <div class="treeview-animated-element {% if request.resolver_match.url_name == 'poll_create' %}opened{% endif %}">
+                    <i class="fas fa-poll ic-w mx-2"></i>ساخت نظرسنجی
+                </div>
+            </a>
+        </li>
+        <li>
+            <a >
+                <div class="treeview-animated-element {% if request.resolver_match.url_name == 'report_card' %}opened{% endif %}">
+                    <i class="fas fa-award ic-w mx-2"></i>ساخت کارنامه (بزودی)
+                </div>
+            </a>
+        </li>
+
+        <li class="treeview-animated-items">
+            <a class="closed {% if request.resolver_match.url_name == 'student_list' or request.resolver_match.url_name == 'student_create' or request.resolver_match.url_name == 'student_detail' or request.resolver_match.url_name == 'student_update' %}active2{% endif %}">
+                <span><i class="far fa-user ic-w mx-2"></i>دانش آموزان</span>
+                <i class="fas fa-angle-right"></i>
+            </a>
+            <ul class="nested">
+                <li>
+                    <a href="{% url 'manager:student_list' %}">
+                        <div class="treeview-animated-element {% if request.resolver_match.url_name == 'student_list' %}activate{% endif %}">
+                            <i class="fas fa-list ic-w mx-2"></i>فهرست دانش آموزان
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'manager:student_create' %}">
+                        <div class="treeview-animated-element {% if request.resolver_match.url_name == 'student_create' %}activate{% endif %}">
+                            <i class="fas fa-user-plus ic-w mx-2"></i>دانش آموز جدید
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="treeview-animated-items">
+            <a class="closed {% if request.resolver_match.url_name == 'parent_list' or request.resolver_match.url_name == 'parent_create' or request.resolver_match.url_name == 'parent_detail' or request.resolver_match.url_name == 'parent_update' %}active2{% endif %}">
+                <span><i class="far fa-user ic-w mx-2"></i>والدین</span>
+                <i class="fas fa-angle-right"></i>
+            </a>
+            <ul class="nested">
+                <li>
+                    <a href="{% url 'manager:parent_list' %}">
+                        <div class="treeview-animated-element {% if request.resolver_match.url_name == 'parent_list' %}activate{% endif %}">
+                            <i class="fas fa-list ic-w mx-2"></i>فهرست والدین
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'manager:parent_create' %}">
+                        <div class="treeview-animated-element {% if request.resolver_match.url_name == 'parent_create' %}activate{% endif %}">
+                            <i class="fas fa-user-plus ic-w mx-2"></i>والدین جدید
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="treeview-animated-items">
+            <a class="closed {% if request.resolver_match.url_name == 'teacher_list' or request.resolver_match.url_name == 'teacher_create' or request.resolver_match.url_name == 'teacher_detail' or request.resolver_match.url_name == 'teacher_update' %}active2{% endif %}">
+                <span><i class="far fa-user ic-w mx-2"></i>دبیران</span>
+                <i class="fas fa-angle-right"></i>
+            </a>
+            <ul class="nested">
+                <li>
+                    <a href="{% url 'manager:teacher_list' %}">
+                        <div class="treeview-animated-element {% if request.resolver_match.url_name == 'teacher_list' %}activate{% endif %}">
+                            <i class="fas fa-list ic-w mx-2"></i>فهرست دبیران
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'manager:teacher_create' %}">
+                        <div class="treeview-animated-element {% if request.resolver_match.url_name == 'teacher_create' %}activate{% endif %}">
+                            <i class="fas fa-user-plus ic-w mx-2"></i>دبیر جدید
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        {% endif %}
+        {% if request.user.is_teacher %}
+        <li class="mt-4 mx-4">
+            <div>برای دبیران</div>
+        </li>
+        <li>
+            <a href="{% url 'main:class_list' %}">
+                <div class="treeview-animated-element {% if request.resolver_match.url_name == 'class_list' or request.resolver_match.url_name == 'class_detail' or request.resolver_match.url_name == 'attendance_detail' %}opened{% endif %}">
+                    <i class="fas fa-chalkboard-teacher ic-w mx-2"></i>کلاس های من
+                </div>
+            </a>
+        </li>
+        {% endif %}
+        {% if request.user.is_student %}
+        <li class="mt-4 mx-4">
+            <div>برای دانش آموزان</div>
+        </li>
+        <li>
+            <a href="{% url 'main:home_work_list' %}">
+                <div class="treeview-animated-element {% if request.resolver_match.url_name == 'home_work_list' or request.resolver_match.url_name == 'home_work_detail' %}opened{% endif %}">
+                    <i class="fas fa-book ic-w mx-2"></i>تکالیف
+                </div>
+            </a>
+        </li>
+        <li class="treeview-animated-items">
+            <a class="closed {% if request.resolver_match.url_name == 'employment_form_list' or request.resolver_match.url_name == 'employment_form_detail' %}active2{% endif %}">
+                <span><i class="far fa-calendar-check ic-w mx-2"></i>در خواست فرم</span>
+                <i class="fas fa-angle-right"></i>
+            </a>
+            <ul class="nested">
+                <li>
+                    <a data-toggle="modal" data-target="#EMPFormModal">
+                        <div class="treeview-animated-element">
+                            <i class="fas fa-layer-group ic-w mx-2"></i>فرم اشتغال به تحصیل
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'main:employment_form_list' %}">
+                        <div class="treeview-animated-element {% if request.resolver_match.url_name == 'employment_form_list' or request.resolver_match.url_name == 'employment_form_detail' %}activate{% endif %}">
+                            <i class="fas fa-list ic-w mx-2"></i>فهرست درخواست ها
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        {% endif %}
+        {% if request.user.is_superuser or request.user.is_manager or request.user.is_teacher or request.user.is_student %}
+        <li class="mt-4 mx-4">
+            <div>آزمون</div>
+        </li>
+        {% if request.user.is_superuser or request.user.is_manager %}
+        <li class="treeview-animated-items">
+            <a class="closed {% if request.resolver_match.url_name == 'quiz_list' or request.resolver_match.url_name == 'quiz_detail' or request.resolver_match.url_name == 'quiz_questions_list' or request.resolver_match.url_name == 'quiz_update' or request.resolver_match.url_name == 'quiz_create' or request.resolver_match.url_name == 'result_list' %}active2{% endif %}">
+                <span><i class="far fa-question-circle ic-w mx-2"></i>آزمون ها</span>
+                <i class="fas fa-angle-right"></i>
+            </a>
+            <ul class="nested">
+                <li>
+                    <a href="{% url 'quiz:quiz_list' %}">
+                        <div class="treeview-animated-element {% if request.resolver_match.url_name == 'quiz_list' %}activate{% endif %}">
+                            <i class="fas fa-list ic-w mx-2"></i>فهرست آزمون ها
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'quiz:result_list' %}">
+                        <div class="treeview-animated-element {% if request.resolver_match.url_name == 'result_list' %}activate{% endif %}">
+                            <i class="fas fa-clipboard-check ic-w mx-2"></i>نتایج
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'quiz:quiz_create' %}">
+                        <div class="treeview-animated-element {% if request.resolver_match.url_name == 'quiz_create' %}activate{% endif %}">
+                            <i class="fas fa-plus-circle ic-w mx-2"></i>آزمون جدید
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        {% elif request.user.is_student or request.user.is_teacher %}
+        <li>
+            <a href="{% url 'quiz:quiz_list' %}">
+                <div class="treeview-animated-element {% if request.resolver_match.url_name == 'quiz_list' %}activate{% endif %}">
+                    <i class="fas fa-list ic-w mx-2"></i>فهرست آزمون ها
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'quiz:result_list' %}">
+                <div class="treeview-animated-element {% if request.resolver_match.url_name == 'result_list' %}activate{% endif %}">
+                    <i class="fas fa-clipboard-check ic-w mx-2"></i>نتایج
+                </div>
+            </a>
+        </li>
+        {% endif %}
+        {% endif %}
+    </ul>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="EMPFormModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">در خواست فرم اشتغال به تحصیل</h5>
+                <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body add_notice">
+                <p> اُرگان مورد نظر را وارد کنید<span class="text-red">*</span></p>
+                <input type="text" id="emp_from_organ" maxlength="120">
+                <input type="hidden" class="d-none" id="emp_from_student" value="{{ request.user.pk }}">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary mx-2" data-dismiss="modal">لغو</button>
+                <button type="button" class="btn btn-success mx-2" onclick="create_emp_form()">ارسال درخواست</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="notices_modal" tabindex="-1" role="dialog" aria-labelledby="notices_modal"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title"
+                                          id="logout_modalLabel">افزودن اعلان جدید</h5>
+                <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="add_notice">
+                    {% if request.user.is_superuser or request.user.is_manager %}
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle Notice_writer" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            نویسنده
+                        </button>
+                        <div id="UsersDropdown" class="dropdown-menu text-right p-2"
+                             aria-labelledby="dropdownMenuButton">
+                            <input type="text" placeholder="جستجو نام..." id="searchInput" onkeyup="search_users()">
+                            {% for user in users %}
+                            <button class="dropdown-item noticeWr" type="button" name="user_name" id="id{{ user.id }}">
+                                {{ user.id }} {{ user.get_full_name }}
+                            </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    <p>عنوان اعلان<span>*</span></p>
+                    <input type="text" id="notice_title" placeholder="عنوان اعلان را بنویسید">
+                    <p>توضیحات اعلان<span>*</span></p>
+                    <textarea id="notice_description" placeholder="توضیحات اعلان را بنویسید"
+                              cols="30" rows="10"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary mx-1" data-dismiss="modal"
+                        aria-label="Close">لغو
+                </button>
+                <button type="button" onclick="submit_notice()" class="btn submit-notice">ارسال</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventModalHeader"></h5>
+                <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="eventModalBody">
+                <input type="hidden" class="d-none" value="" id="event_id">
+                <label for="eventDesc">توضیحات رویداد:</label>
+                <textarea id="eventDesc" class="form-control w-100" rows="4"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary mx-2" data-dismiss="modal">برگشت</button>
+                {% if request.user.is_superuser or request.user.is_manager %}
+                {% if request.resolver_match.url_name == "calendar" %}
+                <button type="button" class="btn btn-success mx-2" id="change_event_desc">ذخیره</button>
+                <button type="button" class="btn btn-danger mx-2" id="delete_event">حذف رویداد</button>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

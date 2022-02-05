@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+{% if request.resolver_match.url_name == "poll_list" %}
+<div class="mt-5 m-3">
+    <div class="breadcrumbs-area">
+        <h3>لیست نظرسنجی ها</h3>
+        {% if request.user.is_superuser or request.user.is_manager %}
+        <a href="{% url 'poll:poll_create' %}" class="btn">ساخت نظرسنجی</a>
+        {% endif %}
+    </div>
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="single-info-details">
+                <div class="item-content">
+                    <div class="content-inline item-content">
+                        <div class="table-box-wrap">
+                            <div class="attendance-table table-responsive student-table-box">
+                                <table class="table display data-table text-nowrap">
+                                    <thead>
+                                    <tr>
+                                        <th>عنوان</th>
+                                        <th>وضعیت</th>
+                                        <th></th>
+                                        {% if request.user.is_superuser or request.user.is_manager %}
+                                        <th></th>
+                                        {% endif %}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for poll in polls %}
+                                    <tr class="filter">
+                                        <td>
+                                            <a href="{% if poll.active and request.user not in poll.users.all %}{% url 'poll:poll_vote' poll.pk %}{% else %}{% url 'poll:poll_result' poll.pk %}{% endif %}"
+                                               class="text-secondary"><b>{{ poll.question }}</b></a>
+                                        </td>
+                                        <td>{% if poll.active == True %}<h2 class="badge badge-success">در جریان</h2>
+                                            {% else %}
+                                            <h2 class="badge badge-danger">بسته شده</h2>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if poll.active and request.user not in poll.users.all %}
+                                            <a href="{% url 'poll:poll_vote' poll.pk %}" class="btn vote-btn">رای
+                                                دادن</a>
+                                            {% endif %}
+                                            <a href="{% url 'poll:poll_result' poll.pk %}"
+                                               class="btn result-btn">نتایج</a>
+                                        </td>
+                                        {% if request.user.is_superuser or request.user.is_manager %}
+                                        <td>
+                                            <a href="{% url 'poll:poll_update' poll.pk %}" class="btn btn-warning">ویرایش</a>
+                                        </td>
+                                        {% endif %}
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% elif request.resolver_match.url_name == "poll_options_list" %}
+<div class="mt-5 m-3">
+    <div class="breadcrumbs-area">
+        <h3>لیست گزینه های نظرسنجی</h3>
+    </div>
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="single-info-details">
+                <div class="item-content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {% for option in options %}
+                            <div class="bg-outline-secondary w-100 my-3 p-2 text-light">
+                                <h3>{{ option.pk }}- {{ option }}</h3>
+                            </div>
+                            {% empty %}
+                            <div class="text-center">
+                                <h3 class="text-danger"><b>گزینه ای پیدا نشد</b></h3>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-lg-12 col-12 text-center">
+                            <button type="button" class="btn btn-primary" data-toggle="collapse"
+                                    data-target=".opt-collapse">
+                                <i class="fas fa-plus-circle"></i>
+                                افزودن گزینه
+                            </button>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="bg-light collapse opt-collapse">
+                                <div class="card-body my-4">
+                                    <div class="row">
+                                        {% csrf_token %}
+                                        <div class="col-md-6 m-auto">
+                                            <input type="hidden" id="poll_id"
+                                                   value="{{ request.resolver_match.kwargs.pk }}">
+                                            <input type="text" class="form-control"
+                                                   placeholder="عنوان گزینه را وارد کنید" id="option_text">
+                                        </div>
+                                        <div class="col-md-12 text-center mt-3">
+                                            <button class="btn btn-success" id="submit-btn">ساخت گزینه</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <a href="{% url 'poll:poll_list' %}" class="btn btn-secondary">برگشت</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% block js_files %}<script src='{% static "poll/poll.js" %}'></script>{% endblock %}
+{% endif %}
+{% endblock %}

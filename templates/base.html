@@ -1,0 +1,28 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="fa">
+{% load pwa %}
+{% progressive_web_app_meta %}
+<head>
+    {% include 'header_references.html' %}
+    <!-- Favicon -->
+    <title>{{ page_title }}</title>
+    <link rel="icon" type="image/png" href="{% if setting %}{{ setting.favicon.url }}{% else %}{% static 'main/img/pico_school_logo.png' %}{% endif %}">
+</head>
+<body>
+<div id="wrapper" class="wrapper bg-ash">
+    {% include 'header.html' %}
+    <!-- Page Area Start Here -->
+    <div class="dashboard-page-one">
+        {% include 'sidebar.html' %}
+        <div class="dashboard-content-one">
+            {% block main %}{% endblock %}
+            {% include "footer.html" %}
+        </div>
+    </div>
+    <!-- Page Area End Here -->
+</div>
+{% include "footer_references.html" %}
+{% block js_files %}{% endblock %}
+</body>
+</html>

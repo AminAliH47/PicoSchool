@@ -1,0 +1,47 @@
+{% load static %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Normalize CSS -->
+<!--<link rel="stylesheet" href="{% static 'css/normalize.css' %}">-->
+<!-- Bootstrap4 CSS -->
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<!-- Fontawesome CSS -->
+<link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+<!-- Flaticon CSS -->
+<link rel="stylesheet" href="{% static 'fonts/flaticon.css' %}">
+<!-- Animate CSS -->
+<!--<link rel="stylesheet" href="{% static 'css/animate.min.css' %}">-->
+<!-- Calendar CSS -->
+<link rel="stylesheet" href="{% static 'manager/fullcalendar/main.min.css' %}">
+<link rel="stylesheet" href="{% static 'manager/fullcalendar-daygrid/main.min.css' %}">
+<link rel="stylesheet" href="{% static 'manager/fullcalendar-timegrid/main.min.css' %}">
+<link rel="stylesheet" href="{% static 'manager/fullcalendar-bootstrap/main.min.css' %}">
+<!-- Style CSS -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<!-- Responsive CSS -->
+<link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+<!-- CKeditor CSS -->
+{% if request.resolver_match.url_name == "quiz_create" or request.resolver_match.url_name == "quiz_update" %}
+<link rel="stylesheet" href="{% static 'css/dialog.css' %}">
+<link rel="stylesheet" href="{% static 'css/editor.css' %}">
+{% endif %}
+<!-- Theme CSS -->
+{% if setting %}
+    {% if setting.site_menu_theme == 'waterfall' %}
+    <link rel="stylesheet" href="{% static 'css/waterfall_menu.css' %}">
+    {% elif setting.site_menu_theme == 'four_rooms' %}
+    <link rel="stylesheet" href="{% static 'css/four_rooms_menu.css' %}">
+    {% else %}
+    <link rel="stylesheet" href="{% static 'css/waterfall_menu.css' %}">
+    {% endif %}
+    {% if setting.site_color == "green" %}
+        <link rel="stylesheet" href="{% static 'css/green_theme.css' %}">
+    {% elif setting.site_color == "orange" %}
+        <link rel="stylesheet" href="{% static 'css/orange_theme.css' %}">
+    {% elif setting.site_color == "yellow" %}
+        <link rel="stylesheet" href="{% static 'css/yellow_theme.css' %}">
+    {% endif %}
+{% else %}
+    <link rel="stylesheet" href="{% static 'css/green_theme.css' %}">
+    <link rel="stylesheet" href="{% static 'css/waterfall_menu.css' %}">
+{% endif %}

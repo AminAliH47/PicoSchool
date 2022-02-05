@@ -1,0 +1,378 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+<div class="breadcrumbs-area">
+    <h3>داشبورد والدین</h3>
+    <ul>
+        <li>{{ request.user.get_full_name }}</li>
+    </ul>
+</div>
+<!-- Breadcubs Area End Here -->
+<!-- Dashboard summery Start Here -->
+<div class="row">
+    <div class="col-3-xxxl col-sm-6 col-12">
+        <div class="dashboard-summery-one theme_color">
+            <div class="row">
+                <div class="col-6">
+                    <div class="item-icon">
+                        <i class="flaticon-money"></i>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="item-content">
+                        <div class="item-title">هزینه مربوطه</div>
+                        <div class="item-number"><p class="text-danger"><b>بزودی</b></p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3-xxxl col-sm-6 col-12">
+        <div class="dashboard-summery-one theme_color">
+            <div class="row">
+                <div class="col-6">
+                    <div class="item-icon">
+                        <i class="far fa-bell" style="margin-top:20px;"></i>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="item-content">
+                        <div class="item-title">اطلاعیه ها</div>
+                        <div class="item-number"><span class="counter" data-num="{{ notice_count.count }}">
+                            {% if notice_count.count %}{{ notice_count.count }}{% else %}0{% endif %}
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-5-xxxl col-12">
+        <div class="card dashboard-card-twelve">
+            <div class="card-body">
+                <div class="heading-layout1">
+                    <div class="item-title">
+                        <h3>فرزندان من</h3>
+                    </div>
+                </div>
+                <div class="kids-details-wrap">
+                    <div class="row">
+                        {% if request.user.student_parent.all %}
+                        {% for child in request.user.student_parent.all %}
+                        <div class="col-12-xxxl col-xl-6 col-12">
+                            <div class="kids-details-box mb-5">
+                                <div class="item-img">
+                                    {% if child.profile_user %}
+                                    <img src="{{ child.profile_user.url }}" alt="{{ child.national_code }}">
+                                    {% else %}
+                                    <img src="{% static 'img/user_image.png' %}" alt="{{ child.national_code }}">
+                                    {% endif %}
+                                </div>
+                                <div class="item-content table-responsive">
+                                    <table class="table text-nowrap">
+                                        <tbody>
+                                        <tr>
+                                            <td>نام:</td>
+                                            <td>{{ child.get_full_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>کد ملی:</td>
+                                            <td>{{ child.national_code }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>مقطع:</td>
+                                            <td>{{ child.grade }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>رشته:</td>
+                                            <td>{{ child.major }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>تاریخ  تولد:</td>
+                                            <td>{{ child.birth_of_date }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="col-12">
+                            <h3 class="text-danger text-center font-weight-bold">فرزندی یافت نشد</h3>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-7-xxxl col-12">
+        <div class="card dashboard-card-eleven">
+            <div class="card-body">
+                <div class="heading-layout1">
+                    <div class="item-title">
+                        <h3>تمام هزینه ها</h3>
+                    </div>
+                </div>
+                <div class="table-box-wrap">
+                    <h3 class="text-danger"><b>بزودی</b></h3>
+<!--                    <form class="search-form-box">-->
+<!--                        <div class="row gutters-8 theme_color">-->
+<!--                            <div class="col-lg-4 col-md-3 form-group">-->
+<!--                                <input type="text" placeholder="جستجو توسط امتحان ..."-->
+<!--                                       class="form-control">-->
+<!--                            </div>-->
+<!--                            <div class="col-lg-3 col-md-3 form-group">-->
+<!--                                <input type="text" placeholder="جستجو توسط موضوع ..."-->
+<!--                                       class="form-control">-->
+<!--                            </div>-->
+<!--                            <div class="col-lg-3 col-md-3 form-group">-->
+<!--                                <input type="text" placeholder="dd/mm/yyyy" class="form-control">-->
+<!--                            </div>-->
+<!--                            <div class="col-lg-2 col-md-3 form-group">-->
+<!--                                <button type="submit"-->
+<!--                                        class="fw-btn-fill">جستجو-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </form>-->
+<!--                    <div class="table-responsive expenses-table-box">-->
+<!--                        <table class="table data-table text-nowrap">-->
+<!--                            <thead>-->
+<!--                            <tr>-->
+<!--                                <th>-->
+<!--                                    <div class="form-check">-->
+<!--                                        <input type="checkbox" class="form-check-input checkAll">-->
+<!--                                        <label class="form-check-label">شناسه</label>-->
+<!--                                    </div>-->
+<!--                                </th>-->
+<!--                                <th>گستردگی</th>-->
+<!--                                <th>مقدار</th>-->
+<!--                                <th>وضعیت</th>-->
+<!--                                <th>ایمیل</th>-->
+<!--                                <th>تاریخ</th>-->
+<!--                                <th></th>-->
+<!--                            </tr>-->
+<!--                            </thead>-->
+<!--                            <tbody>-->
+<!--                            <tr>-->
+<!--                                <td>-->
+<!--                                    <div class="form-check">-->
+<!--                                        <input type="checkbox" class="form-check-input">-->
+<!--                                        <label class="form-check-label">#0021</label>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>هزینه های آزمون</td>-->
+<!--                                <td>15000 تومان</td>-->
+<!--                                <td class="badge badge-pill badge-success d-block mg-t-8">پرداخت شده</td>-->
+<!--                                <td>akkhorschool@gmail.com</td>-->
+<!--                                <td>22/02/2019</td>-->
+<!--                                <td>-->
+<!--                                    <div class="dropdown">-->
+<!--                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"-->
+<!--                                           aria-expanded="false">-->
+<!--                                            <span class="flaticon-more-button-of-three-dots"></span>-->
+<!--                                        </a>-->
+<!--                                        <div class="dropdown-menu dropdown-menu-right">-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-times text-orange-red"></i>بستن</a>-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-cogs text-dark-pastel-green"></i>ویرایش</a>-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-redo-alt text-orange-peel"></i>تازه کردن</a>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td>-->
+<!--                                    <div class="form-check">-->
+<!--                                        <input type="checkbox" class="form-check-input">-->
+<!--                                        <label class="form-check-label">#0022</label>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>هزینه ترم</td>-->
+<!--                                <td>35000 تومان</td>-->
+<!--                                <td class="badge badge-pill badge-danger d-block mg-t-8">قابل پرداخت</td>-->
+<!--                                <td>akkhorschool@gmail.com</td>-->
+<!--                                <td>22/02/2019</td>-->
+<!--                                <td>-->
+<!--                                    <div class="dropdown">-->
+<!--                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"-->
+<!--                                           aria-expanded="false">-->
+<!--                                            <span class="flaticon-more-button-of-three-dots"></span>-->
+<!--                                        </a>-->
+<!--                                        <div class="dropdown-menu dropdown-menu-right">-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-times text-orange-red"></i>بستن</a>-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-cogs text-dark-pastel-green"></i>ویرایش</a>-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-redo-alt text-orange-peel"></i>تازه کردن</a>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td>-->
+<!--                                    <div class="form-check">-->
+<!--                                        <input type="checkbox" class="form-check-input">-->
+<!--                                        <label class="form-check-label">#0023</label>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>هزینه های آزمون</td>-->
+<!--                                <td>15000 تومان</td>-->
+<!--                                <td class="badge badge-pill badge-success d-block mg-t-8">پرداخت شده</td>-->
+<!--                                <td>akkhorschool@gmail.com</td>-->
+<!--                                <td>22/02/2019</td>-->
+<!--                                <td>-->
+<!--                                    <div class="dropdown">-->
+<!--                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"-->
+<!--                                           aria-expanded="false">-->
+<!--                                            <span class="flaticon-more-button-of-three-dots"></span>-->
+<!--                                        </a>-->
+<!--                                        <div class="dropdown-menu dropdown-menu-right">-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-times text-orange-red"></i>بستن</a>-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-cogs text-dark-pastel-green"></i>ویرایش</a>-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-redo-alt text-orange-peel"></i>تازه کردن</a>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td>-->
+<!--                                    <div class="form-check">-->
+<!--                                        <input type="checkbox" class="form-check-input">-->
+<!--                                        <label class="form-check-label">#0024</label>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>هزینه های آزمون</td>-->
+<!--                                <td>15000 تومان</td>-->
+<!--                                <td class="badge badge-pill badge-danger d-block mg-t-8">قابل پرداخت</td>-->
+<!--                                <td>akkhorschool@gmail.com</td>-->
+<!--                                <td>22/02/2019</td>-->
+<!--                                <td>-->
+<!--                                    <div class="dropdown">-->
+<!--                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"-->
+<!--                                           aria-expanded="false">-->
+<!--                                            <span class="flaticon-more-button-of-three-dots"></span>-->
+<!--                                        </a>-->
+<!--                                        <div class="dropdown-menu dropdown-menu-right">-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-times text-orange-red"></i>بستن</a>-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-cogs text-dark-pastel-green"></i>ویرایش</a>-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-redo-alt text-orange-peel"></i>تازه کردن</a>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td>-->
+<!--                                    <div class="form-check">-->
+<!--                                        <input type="checkbox" class="form-check-input">-->
+<!--                                        <label class="form-check-label">#0025</label>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>هزینه های آزمون</td>-->
+<!--                                <td>15000 تومان</td>-->
+<!--                                <td class="badge badge-pill badge-success d-block mg-t-8">پرداخت شده</td>-->
+<!--                                <td>akkhorschool@gmail.com</td>-->
+<!--                                <td>22/02/2019</td>-->
+<!--                                <td>-->
+<!--                                    <div class="dropdown">-->
+<!--                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"-->
+<!--                                           aria-expanded="false">-->
+<!--                                            <span class="flaticon-more-button-of-three-dots"></span>-->
+<!--                                        </a>-->
+<!--                                        <div class="dropdown-menu dropdown-menu-right">-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-times text-orange-red"></i>بستن</a>-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-cogs text-dark-pastel-green"></i>ویرایش</a>-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-redo-alt text-orange-peel"></i>تازه کردن</a>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td>-->
+<!--                                    <div class="form-check">-->
+<!--                                        <input type="checkbox" class="form-check-input">-->
+<!--                                        <label class="form-check-label">#0026</label>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>هزینه ترم</td>-->
+<!--                                <td>35000 تومان</td>-->
+<!--                                <td class="badge badge-pill badge-danger d-block mg-t-8">قابل پرداخت</td>-->
+<!--                                <td>akkhorschool@gmail.com</td>-->
+<!--                                <td>22/02/2019</td>-->
+<!--                                <td>-->
+<!--                                    <div class="dropdown">-->
+<!--                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"-->
+<!--                                           aria-expanded="false">-->
+<!--                                            <span class="flaticon-more-button-of-three-dots"></span>-->
+<!--                                        </a>-->
+<!--                                        <div class="dropdown-menu dropdown-menu-right">-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-times text-orange-red"></i>بستن</a>-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-cogs text-dark-pastel-green"></i>ویرایش</a>-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-redo-alt text-orange-peel"></i>تازه کردن</a>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td>-->
+<!--                                    <div class="form-check">-->
+<!--                                        <input type="checkbox" class="form-check-input">-->
+<!--                                        <label class="form-check-label">#0027</label>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>هزینه های آزمون</td>-->
+<!--                                <td>15000 تومان</td>-->
+<!--                                <td class="badge badge-pill badge-success d-block mg-t-8">پرداخت شده</td>-->
+<!--                                <td>akkhorschool@gmail.com</td>-->
+<!--                                <td>22/02/2019</td>-->
+<!--                                <td>-->
+<!--                                    <div class="dropdown">-->
+<!--                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"-->
+<!--                                           aria-expanded="false">-->
+<!--                                            <span class="flaticon-more-button-of-three-dots"></span>-->
+<!--                                        </a>-->
+<!--                                        <div class="dropdown-menu dropdown-menu-right">-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-times text-orange-red"></i>بستن</a>-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-cogs text-dark-pastel-green"></i>ویرایش</a>-->
+<!--                                            <a class="dropdown-item" href="#"><i-->
+<!--                                                    class="fas fa-redo-alt text-orange-peel"></i>تازه کردن</a>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+<!--                            </tbody>-->
+<!--                        </table>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-6 col-xl-6">
+        {% include 'event_calendar.html' %}
+    </div>
+    <div class="col-lg-6 col-xl-6">
+        {% include 'notice_boxes.html' %}
+    </div>
+</div>
+{% endblock %}

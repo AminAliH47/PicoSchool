@@ -1,0 +1,89 @@
+<div class="card dashboard-card-six">
+    <div class="card-body">
+        <div class="heading-layout1 mg-b-17">
+            <div class="item-title">
+                <a href="{% url 'main:notices' %}">
+                    <h3>تابلو اعلانات</h3>
+                </a>
+            </div>
+        </div>
+        <div class="notice-box-wrap">
+            {% if notices %}
+            {% for notice in notices %}
+            <div id="ENB{{ notice.id }}">
+                {% if request.user.is_superuser or request.user.is_manager %}
+                <button type="button" name="{{ notice.id }}" class="delete_notice"><i
+                        class="fas fa-trash text-red notice_trash_icon"></i></button>
+                {% if request.resolver_match.url_name == "notices" %}
+                <button type="button" name="{{ notice.id }}" class="edit_notice"><i
+                        class="fas fa-edit text-red notice_edit_icon"></i></button>
+                {% endif %}
+                {% endif %}
+                <div class="notice-list theme_color" id="{{ notice.id }}">
+                    <div class="post-date">{{ notice.jpublish }}</div>
+                    <h6 class="notice-title"><a href="{% url 'main:notices' %}#{{ notice.id }}">
+                        {{ notice.title }}</a></h6>
+                    {% if request.resolver_match.url_name == "notices" %}
+                    <p class="notice-title">{{ notice.description }}</p>
+                    {% endif %}
+                    <div class="entry-meta"><span>{{ notice.publish|timesince }} پیش</span> /
+                        <span id="notice_writer2"><span>{{notice.writer.id}}</span> {{ notice.writer.get_full_name }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <h5 class="text-danger font-weight-bold text-center">اعلانی برای نمایش وجود ندارد</h5>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="edit_notice_modal" tabindex="-1" role="dialog" aria-labelledby="notices_modal"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title"
+                                          id="logout_modalLabel">افزودن اعلان جدید</h5>
+                <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="add_notice">
+                    {% if request.user.is_superuser or request.user.is_manager %}
+                    <div class="dropdown">
+                        <form method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-secondary dropdown-toggle Notice_writer" type="button"
+                                    data-toggle="dropdown" aria-haspopup="true" name="" aria-expanded="false">
+                                نویسنده
+                            </button>
+                            <div id="UsersDropdown" class="dropdown-menu text-right p-2"
+                                 aria-labelledby="dropdownMenuButton">
+                                <input type="text" placeholder="جستجو نام..." class="searchInput"
+                                       onkeyup="search_users()">
+                                {% for user in users %}
+                                <button class="dropdown-item noticeWr" type="button" name="user_name"
+                                        id="id{{ user.id }}">
+                                    {{ user.id }} {{ user.get_full_name }}
+                                </button>
+                                {% endfor %}
+                            </div>
+                        </form>
+                    </div>
+                    {% endif %}
+                    <p>عنوان اعلان<span>*</span></p>
+                    <input type="text" id="Enotice_title2" placeholder="عنوان اعلان را بنویسید">
+                    <p>توضیحات اعلان<span>*</span></p>
+                    <textarea name="notice_description" id="Enotice_description2" placeholder="توضیحات اعلان را بنویسید"
+                              cols="30" rows="10"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary mx-1" data-dismiss="modal"
+                        aria-label="Close">لغو
+                </button>
+                <button type="button" onclick="edit_notice()" class="btn submit-notice">ارسال</button>
+            </div>
+        </div>
+    </div>
+</div>

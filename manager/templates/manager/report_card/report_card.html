@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+<div class="m-4 mt-5">
+    <div class="row">
+        <div class="col-12 col-xl-12">
+            <div class="card dashboard-card-two pd-b-20">
+                <div class="card-body">
+                    <div class="heading-layout1">
+                        <div class="item-title">
+                            <h3>محاسبه کارنامه</h3>
+                        </div>
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                               aria-expanded="false">...</a>
+
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="{% url 'manager:report_card' %}"><i
+                                        class="fas fa-redo-alt text-orange-peel"></i>تازه کردن</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="expense-report">
+                        <p class="form-group-title d-block ml-4" style="font-size:18px">صادر شود برای :</p>
+                        <div class="dropdown add_notice">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="studentRPDropdown"
+                                    data-toggle="dropdown">
+                                انتخاب دانش آموز
+                            </button>
+                            <div class="dropdown-menu" id="studentsDP">
+                                <input type="text" placeholder="جستجو نام ..." id="myInput" onkeyup="filterStudents()">
+                                {% for student in students %}
+                                <button class="dropdown-item student" id="stu{{ student.id }}">{{ student }}</button>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="expense-chart-wrap report_card">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>نام درس</th>
+                                <th>نمره</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <div class="dropdown add_notice">
+                                        <button class="btn btn-primary dropdown-toggle" type="button"
+                                                id="bookRPDropdown"
+                                                data-toggle="dropdown">
+                                            انتخاب درس
+                                        </button>
+                                        <div class="dropdown-menu" id="booksDP">
+                                            <input type="text" placeholder="جستجو نام ..." id="filterInput"
+                                                   onkeyup="filterBooks()">
+                                            {% for book in books %}
+                                            <button class="dropdown-item" id="boo{{ book.id }}">{{ book }}
+                                            </button>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" class="score" placeholder="نمره درس">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% block js_files %}<script src='{% static "js/report_card.js" %}'></script>{% endblock %}
+{% endblock %}

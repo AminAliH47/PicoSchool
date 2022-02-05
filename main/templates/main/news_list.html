@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+<div class="mt-5 m-3">
+    <div class="breadcrumbs-area">
+        <h3>لیست اخبار</h3>
+    </div>
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="single-info-details">
+                <div class="item-content">
+                    <div class="content-inline item-content">
+                        <div class="row news-list">
+                            {% for new in feeds.entries %}
+                            <div class="col-12">
+                                <hr>
+                                <div class="row">
+                                        <div class="image">
+                                            {% for link in new.links %}
+                                            {% if link.type == 'image/jpeg' %}
+                                            <img src="{{ link.href }}" alt="{{ new.title }}">
+                                            {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    <div class="content">
+                                        <div class="title">
+                                            <h4><a href="{{ new.link }}" target="_blank">{{ new.title }}</a></h4>
+                                        </div>
+                                        <div class="author">
+                                            <h6>نویسنده</h6>
+                                            <span>{{ new.author }}</span>
+                                        </div>
+                                        <div class="description">
+                                            <p>{{ new.summary }}</p>
+                                        </div>
+                                        <div class="category">
+                                            <h6>دسته بندی</h6>
+                                            <span>{{ new.category }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

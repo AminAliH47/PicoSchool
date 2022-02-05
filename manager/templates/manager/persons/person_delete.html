@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="m-5">
+    <div class="col-4-xxxl col-12">
+        <div class="card height-auto">
+            <div class="card-body">
+                <div class="heading-layout1">
+                    <div class="item-title">
+                        <h3 class="font-weight-bold">حذف {{ person }}</h3>
+                    </div>
+                </div>
+                <hr>
+                <form class="new-added-form" method="post">{% csrf_token %}
+                    <h3 class="my-5">آیا از حذف "{{ person }}" اطمینان دارید؟</h3>
+                    <hr>
+                    <button type="submit" class="btn btn-danger">حذف</button>
+                    <a href="{% if request.resolver_match.url_name == 'student_delete' %}{% url 'manager:student_list' %}{% elif request.resolver_match.url_name == 'parent_delete' %}{% url 'manager:parent_list' %}{% elif request.resolver_match.url_name == 'teacher_delete' %}{% endif %}" class="btn btn-secondary">لغو</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

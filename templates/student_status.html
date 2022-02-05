@@ -1,0 +1,26 @@
+<div class="card dashboard-card-three">
+    <div class="card-body">
+        <div class="heading-layout1">
+            <div class="item-title">
+                <h3>حضور</h3>
+            </div>
+
+        </div>
+        <div class="doughnut-chart-wrap">
+            <canvas id="studentChart"></canvas>
+            <input type="hidden" class="d-none" value="{{ present }}" id="stuPresent">
+            <input type="hidden" class="d-none" value="{{ absent }}" id="stuAbsent">
+            <input type="hidden" class="d-none" value="{{ plate }}" id="stuPlate">
+        </div>
+        <div class="student-report">
+            <div class="student-count pseudo-bg-red">
+                <h4 class="item-title">غایب</h4>
+                <div class="item-number">{{ absent }}%</div>
+            </div>
+            <div class="student-count pseudo-bg-green">
+                <h4 class="item-title">حاضر</h4>
+                <div class="item-number">{{ present }}%</div>
+            </div>
+        </div>
+    </div>
+</div>

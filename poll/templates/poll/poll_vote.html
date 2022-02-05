@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+<div class="m-2">
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        <h3>نظرسنجی <b>"{{ poll }}"</b>  </h3>
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <!-- Add New Teacher Area Start Here -->
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="text-center">{{ poll.question }}</h3>
+                </div>
+                    {% csrf_token %}
+                    <input type="hidden" id="poll_pk" value="{{ poll.pk }}">
+                    {% for option in poll.poll_option.all %}
+                    <div class="col-md-12">
+                        <label class="rdButton">
+                            <input type="radio" name="poll" value="{{ option.pk }}">
+                            <span class="checkmark"></span>
+                            <p>{{ option }}</p>
+                        </label>
+                    </div>
+                    {% endfor %}
+                    <div class="col-md-12">
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <button type="button" class="btn btn-success" id="vote-btn">
+                            ثبت
+                        </button>
+                        <a href="{% url 'poll:poll_list' %}" class="btn btn-secondary">برگشت</a>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% block js_files %}<script src='{% static "poll/poll.js" %}'></script>{% endblock %}
+{% endblock %}

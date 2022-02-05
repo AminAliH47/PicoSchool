@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+{% if request.resolver_match.url_name == "quiz_detail" %}
+<div class="mt-5 m-3">
+    <div class="breadcrumbs-area">
+        <h3> آزمون "<b>{{ quiz.name }}</b>"</h3>
+    </div>
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="single-info-details">
+                <div class="item-content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="info-table table-responsive">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {% csrf_token %}
+                                        <table class="table text-nowrap">
+                                            <tbody>
+                                            <tr>
+                                                <td><h3>نام آزمون</h3></td>
+                                                <td><h3><b>{{ quiz.name }}</b></h3></td>
+                                            </tr>
+                                            <tr>
+                                                <td><h3>موضوع</h3></td>
+                                                <td><h3><b>{{ quiz.topic }}</b></h3></td>
+                                            </tr>
+                                            <tr>
+                                                <td><h3>کلاس</h3></td>
+                                                <td><h3><b>{{ quiz.quiz_class }}</b></h3></td>
+                                            </tr>
+                                            <tr>
+                                                <td><h3>کتاب</h3></td>
+                                                <td><h3><b>{{ quiz.quiz_book }}</b></h3></td>
+                                            </tr>
+                                            <tr>
+                                                <td><h3>وضعیت</h3></td>
+                                                <td>
+                                                    <h3 class="badge badge-{% if quiz.active %}success{% else %}danger{% endif %}">
+                                                        {% if quiz.active %}فعال{% else %}غیر فعال{% endif %}
+                                                    </h3>
+                                                </td>
+                                            </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <table class="table text-nowrap">
+                                            <tbody>
+                                            <tr>
+                                                <td><h3>نمایش سوالات در صفحات جدا؟</h3></td>
+                                                <td><h3><b>
+                                                    {% if quiz.show_quiz %}
+                                                    بله
+                                                    {% else %}
+                                                    خیر
+                                                    {% endif %}
+                                                </b></h3></td>
+                                            </tr>
+                                            <tr>
+                                                <td><h3>زمان آزمون</h3></td>
+                                                <td><h3><b>{{ quiz.time }} دقیقه</b></h3></td>
+                                            </tr>
+                                            <tr>
+                                                <td><h3>سختی</h3></td>
+                                                <td>
+                                                    <h3 class="badge badge-{% if quiz.difficulty == 'آسان' %}success{% elif quiz.difficulty == 'متوسط' %}warning{% elif quiz.difficulty == 'سخت' %}danger{% endif %}">
+                                                        {{ quiz.difficulty }}
+                                                    </h3>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <h3>دانش آموزانی که شرکت کرده اند:</h3>
+                                        {% for student in quiz.students.all %}
+                                            <b>{{ student }}</b>،
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if request.user.is_superuser or request.user.is_manager %}
+                        <div class="col-md-12">
+                            <hr>
+                        </div>
+                        <div class="col-md-12">
+                            <a href="{% url 'quiz:quiz_questions_list' quiz.pk %}" class="btn btn-info w-100">
+                                لیست سوالات آزمون
+                            </a>
+                        </div>
+                        <div class="col-md-12">
+                            <hr>
+                        </div>
+                        {% endif %}
+                        <div class="col-md-12 mt-3">
+                            <a href="{% url 'quiz:quiz_list' %}" class="btn btn-secondary">برگشت</a>
+                            {% if request.user.is_superuser or request.user.is_manager %}
+                            <a href="{% url 'quiz:quiz_update' quiz.pk %}" class="btn btn-warning">ویرایش</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% elif request.resolver_match.url_name == "result_detail" %}
+<input type="hidden" class="d-none" id="result_pk" data-pk="{{ request.resolver_match.kwargs.pk }}">
+<div class="mt-5 m-3" id="printResult">
+    <style>
+    @media print {
+    .noPrint {
+        display: none;
+    }
+    .w-100-print{
+        width: 100%;
+    }
+}
+</style>
+    <div class="breadcrumbs-area">
+        <h3> نتیجه آزمون " <b>{{ result.quiz.name }}</b>" برای دانش آموز <b>"{{ result.user }}"</b> </h3>
+    </div>
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="single-info-details">
+                <div class="item-content">
+                    {% for qus in questions %}
+                    <input type="hidden" class="d-none" value="{{ qus.id }}" data-text='{{ qus }}' name="qus_id" >
+                    <div class="card-body my-4">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>{{ qus }}</h3><span class="text-secondary" id="not{{ qus.id }}" style="display: none;">(پاسخ نداده)</span>
+                                {% if qus.question_type == "تشریحی" %}
+                                 <input type="hidden" class="d-none" value="{{ qus.id }}" name="qus_id">
+                                    {% for ans in qus.answer_desc_question.all %}
+                                    <textarea class="form-control w-100 text-qus" id="box{{ qus.id }}"
+                                                      cols="30" rows="10" disabled></textarea>
+                                    {% endfor %}
+                                {% elif qus.question_type == "چهار گزینه ای" %}
+                                <input type="hidden" class="d-none" id="user_role" data-is_superuser="{{ request.user.is_superuser }}"
+                                data-is_teacher="{{ request.user.is_teacher }}">
+                                {% for ans in qus.answer_multi_question.all %}
+                                <input type="hidden" class="d-none" id="{{ ans.id }}" value="{% if ans.correct %}{{ ans.pk }}{% endif %}">
+                                <input type="hidden" class="d-none" name="ans_id" value="{{ ans.id }}">
+                                <div class="d-block mt-2 ">
+                                    <input type="radio" value="{{ ans.text }}"
+                                           id="{{ qus.pk }}-{{ ans.pk }}" class="answer"
+                                           data-pk="{{ ans.pk }}"
+                                           data-correct="{% if ans.correct %}{{ ans.pk }}{% endif %}"
+                                           style="width: 18px; height: 18px;"
+                                            disabled>
+                                    <label for="{{ qus.pk }}-{{ ans.pk }}" id="lbl{{ ans.pk }}" class="h3">{{ ans.text }}</label>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <a href="{% url 'quiz:result_list' %}" class="btn btn-secondary noPrint">برگشت</a>
+            {% if request.user.is_superuser or request.user.is_manager or request.user.is_teacher %}
+            <button class="btn btn-warning noPrint" id="printResultBtn"> <i class="fas fa-print"></i> چاپ سوالات</button>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+{% block js_files %}<script src='{% static "quiz/results.js" %}'></script>{% endblock %}

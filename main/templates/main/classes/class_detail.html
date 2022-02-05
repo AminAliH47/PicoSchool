@@ -1,0 +1,441 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="m-2">
+    {% if request.resolver_match.url_name == "class_detail" %}
+    {% load static %}
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        <h3>{{ class.name }}</h3>
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <!-- Student Details Area Start Here -->
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="heading-layout1">
+                <div class="item-title">
+                    <h3>{{ class.id }}</h3>
+                </div>
+            </div>
+            <div class="single-info-details">
+                <div class="item-content">
+                    <div class="header-inline item-header">
+                        <span>نام کلاس</span>
+                        <h3 class="text-dark-medium font-medium">{{ class.name }}</h3>
+                    </div>
+                    <div class="info-table table-responsive">
+                        <table class="table text-nowrap">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <p class="form-group-title">
+                                        <button class="form-group-title-btn" type="button" data-toggle="collapse"
+                                                data-target=".StudentList">
+                                            لیست دانش آموزان <i class="fas fa-arrow-down"></i>
+                                        </button>
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="StudentList collapse">
+                                        {% for student in class.student_class.all %}
+                                        <div class="d-block mb-3">
+                                            {% if request.user.is_superuser or request.user.is_manager %}
+                                            <a href="{% url 'main:student_detail' student.pk %}"><b>
+                                                <span>{{ student.id }}</span> - {{ student }}</b></a>
+                                            {% elif request.user.is_teacher %}
+                                            <b><span>{{ student.id }}</span> - {{ student }}</b>
+                                            {% endif %}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <p class="form-group-title">
+                                        <button class="form-group-title-btn" type="button" data-toggle="collapse"
+                                                data-target=".TeacherList">
+                                            لیست دبیران <i class="fas fa-arrow-down"></i>
+                                        </button>
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="TeacherList collapse">
+                                        {% for teacher in class.teacher.all %}
+                                        <div class="d-block mb-3">
+                                            {% if request.user.is_superuser or request.user.is_manager %}
+                                            <a href="{% url 'main:teacher_detail' teacher.pk %}"><b>
+                                                <span>{{ teacher.id }}</span> - {{ teacher }}</b></a>
+                                            {% elif request.user.is_teacher %}
+                                            <b><span>{{ teacher.id }}</span> - {{ teacher }}</b>
+                                            {% endif %}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p class="form-group-title">
+                                        <button class="form-group-title-btn" type="button" data-toggle="collapse"
+                                                data-target=".multiCollapseExample2" aria-expanded="false"
+                                                aria-controls="multiCollapseExample2">
+                                            لیست حضور و غیاب <i class="fas fa-arrow-down"></i>
+                                        </button>
+                                    </p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="attendance-table multi-collapse multiCollapseExample2 collapse show">
+                            {% if request.user.is_superuser or request.user.is_manager %}
+                            <input type="hidden" class="d-none" id="jalali_date" value="{{ jalali_date }}">
+                            <div id="att_create_btn">
+                                <button class="btn btn-primary mb-5" data-toggle="collapse"
+                                        data-target="#AttendanceCollapse">
+                                    ساخت لیست حضور و غیاب برای <b>{{ jalali_date }}</b> (امروز)
+                                </button>
+                            </div>
+                            <div class="collapse mb-5" id="AttendanceCollapse">
+                                <input type="hidden" id="csId" value="{{ request.resolver_match.kwargs.pk }}">
+                                {% for book in class.books.all %}
+                                <button class="btn btn-secondary d-block mb-3 book_att" value="{{ book.id }}"> ساخت حضور
+                                    غیاب برای درس " <b>{{ book.name }}</b>"
+                                </button>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>نام کلاس</th>
+                                    <th>تاریخ برگزاری کلاس</th>
+                                    <th>کتاب تدریس شده</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for att in class.attendance_class.all %}
+                                {% if request.user.is_superuser or request.user.is_manager or att.teacher.pk == request.user.pk %}
+                                <tr>
+                                    <td>
+                                        {% if request.user.is_superuser or request.user.is_manager or att.teacher.pk == request.user.pk %}
+                                        <a href="{{ att.get_absolute_url }}"><b>
+                                            {{ att.attendance_class }}</b></a>
+                                        {% else %}
+                                        <b>{{ att.attendance_class }}</b>
+                                        {% endif %}
+                                    </td>
+                                    <td class="att_jdate"><a href="{{ att.get_absolute_url }}">
+                                        {{ att.jdate }}</a></td>
+                                    <td class="att_book">{{ att.book }}</td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    let att_create_btn = document.getElementById('att_create_btn');
+    let jalali_date = document.getElementById('jalali_date');
+    let att_jdate = document.getElementsByClassName('att_jdate');
+    let att_book = document.getElementsByClassName('att_book');
+    let AttendanceCollapse = document.getElementById('AttendanceCollapse');
+    let book_list = AttendanceCollapse.getElementsByTagName('b');
+    for (let i = 0; i < att_jdate.length; i++){
+        for (let j = 0; j < book_list.length; j++){
+            if (book_list[j].innerText == att_book[i].innerText && att_jdate[i].innerText == jalali_date.value){
+                book_list[j].parentElement.remove()
+            }
+        }
+    }
+    </script>
+    {% elif request.resolver_match.url_name == "attendance_detail" %}
+    {% load static %}
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        <h3>{{ attendance.jdate }}</h3>
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <!-- Student Details Area Start Here -->
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="heading-layout1">
+            </div>
+            <div class="single-info-details">
+                <div class="item-content">
+                    <div class="header-inline item-header">
+                        <span>نام کلاس</span>
+                        <h3 class="text-dark-medium font-medium">{{ attendance.attendance_class.name }}</h3>
+                        <span>تاریخ برگزاری کلاس</span>
+                        <h3 class="text-dark-medium font-medium">{{ attendance.jdate }}</h3>
+                        <span>کتاب تدریس شده</span>
+                        <h3 class="text-dark-medium font-medium">{{ attendance.book }}</h3>
+                        <br>
+                        <div class="d-block">
+                            <span>مقطع</span>
+                            <h3 class="text-dark-medium font-medium">{{ attendance.attendance_class.grade }}</h3>
+                            <span>رشته</span>
+                            <h3 class="text-dark-medium font-medium">{{ attendance.attendance_class.major }}</h3>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-warning mb-3" data-toggle="modal" data-target="#HWModal">افزودن تکلیف
+                        </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="HWModal" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">ساخت تکلیف برای کلاس امروز</h5>
+                                        <button type="button" class="close ml-0" data-dismiss="modal"
+                                                aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body add_notice">
+                                        <p> عنوان تکلیف<span class="text-red">*</span></p>
+                                        <input type="text" id="hw_title">
+                                        <p>توضیخات بیشتر</p>
+                                        <textarea id="hw_description"></textarea>
+                                        <input type="hidden" class="d-none" id="hw_att"
+                                               value="{{ request.resolver_match.kwargs.pk }}">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">لغو
+                                        </button>
+                                        <button type="button" class="btn btn-success mr-4" onclick="create_hw()">
+                                            افزودن
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-table table-responsive">
+                        <table class="table w-100">
+                            <thead>
+                            <tr>
+                                <th>شماره</th>
+                                <th>نام و نام خانوادگی</th>
+                                <th>وضعیت</th>
+                                <th>یادداشت</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for student in attendance.attendance_class.student_class.all %}
+                            <tr>
+                                <td>{{ student.id }}</td>
+                                <td>{{ student }}</td>
+                                <td class="don">
+                                    {% for s in attendance.att_assign.all %}
+                                    {% if s.student.id == student.id %}
+                                    <div class="dropdown">
+                                        <button class="btn {% if s.attendance_status == 'حاضر' %}btn-success{% elif s.attendance_status == 'غایب' %}btn-danger{% elif s.attendance_status == 'حاضر (با تاخیر)' %}btn-warning{% else %}btn-light{% endif %} dropdown-toggle"
+                                                type="button"
+                                                name="AttendanceStatus{{ student.id }}"
+                                                id="{{ request.resolver_match.kwargs.pk }}" data-toggle="dropdown"
+                                                aria-haspopup="true"
+                                                aria-expanded="false">
+                                            {{ s.attendance_status }}
+                                        </button>
+                                        <input class="d-none" type="hidden" name="val{{ student.id }}"
+                                               value="{{ s.id }}">
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <button type="button" class="dropdown-item present" name="{{ student.id }}">
+                                                حاضر
+                                            </button>
+                                            <button type="button" class="dropdown-item absent" name="{{ student.id }}">
+                                                غایب
+                                            </button>
+                                            <button type="button" class="dropdown-item pLate" name="{{ student.id }}">
+                                                حاضر (با تاخیر)
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {% for s in attendance.att_assign.all %}
+                                    {% if s.student.id == student.id %}
+                                    <input type="hidden" class="d-none" name="ass{{ student.id }}" value="{{ s.id }}">
+                                    <input type="text" name="{{ student.id }}" class="form-control SNote"
+                                           value="{% if s.attendance_note %}{{ s.attendance_note }}{% endif %}">
+                                    {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            <script>
+                                    var dropdown_div = document.createElement("div");
+                                    dropdown_div.classList.add('dropdown');
+                                    var dropdown_btn = document.createElement("button");
+                                    dropdown_btn.classList.add('btn');
+                                    dropdown_btn.classList.add('btn-light');
+                                    dropdown_btn.classList.add('dropdown-toggle');
+                                    dropdown_btn.dataset.toggle = "dropdown";
+                                    dropdown_btn.id = '{{ request.resolver_match.kwargs.pk }}';
+                                    dropdown_btn.name = 'CrAttendanceStatus{{ student.id }}';
+                                    dropdown_btn.innerText = " --------- ";
+                                    dropdown_div.appendChild(dropdown_btn);
+                                    var dropdown_div_div = document.createElement("div");
+                                    dropdown_div_div.classList.add('dropdown-menu');
+                                    dropdown_div.appendChild(dropdown_div_div);
+                                    var dropdown_div_btn1 = document.createElement("button");
+                                    dropdown_div_btn1.classList.add('dropdown-item');
+                                    dropdown_div_btn1.classList.add('present_cr');
+                                    dropdown_div_btn1.name = '{{ student.id }}';
+                                    dropdown_div_btn1.innerText = "حاضر";
+                                    dropdown_div_div.appendChild(dropdown_div_btn1);
+                                    var dropdown_div_btn2 = document.createElement("button");
+                                    dropdown_div_btn2.classList.add('dropdown-item');
+                                    dropdown_div_btn2.classList.add('absent_cr');
+                                    dropdown_div_btn2.name = '{{ student.id }}';
+                                    dropdown_div_btn2.innerText = "غایب";
+                                    dropdown_div_div.appendChild(dropdown_div_btn2);
+                                    var dropdown_div_btn3 = document.createElement("button");
+                                    dropdown_div_btn3.classList.add('dropdown-item');
+                                    dropdown_div_btn3.classList.add('pLate_cr');
+                                    dropdown_div_btn3.name = '{{ student.id }}';
+                                    dropdown_div_btn3.innerText = "حاضر (با تاخیر)";
+                                    dropdown_div_div.appendChild(dropdown_div_btn3);
+                                    const don{{ student.id }} = document.getElementsByClassName('don');
+                                    for (let i = 0; i < don{{ student.id }}.length; i++){
+                                        if (don{{ student.id }}[i].innerText == ""){
+                                            don{{ student.id }}[i].appendChild(dropdown_div.cloneNode(true));
+                                        }
+                                    }
+
+
+
+
+                            </script>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% elif request.resolver_match.url_name == "home_work_detail" %}
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        <h3>{{ home_work.title }}</h3>
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <!-- Student Details Area Start Here -->
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="single-info-details">
+                <div class="item-content">
+                    <div class="header-inline item-header">
+                        <span>نام کلاس</span>
+                        <h3 class="text-dark-medium font-medium">{{ home_work.attendance.attendance_class.name }}</h3>
+                        <span>تاریخ برگزاری کلاس</span>
+                        <h3 class="text-dark-medium font-medium">{{ home_work.date }}</h3>
+                        <span>کتاب تدریس شده</span>
+                        <h3 class="text-dark-medium font-medium">{{ home_work.attendance.book }}</h3>
+                    </div>
+                    <hr>
+                    <div class="m-3 text-center">
+                        <h3>{{ home_work.title }}</h3>
+                        <p style="width: 100%;">{{ home_work.description }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% elif request.resolver_match.url_name == "employment_form_detail" %}
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        <h3>{{ employment_form.student }}</h3>
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <!-- Student Details Area Start Here -->
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="single-info-details">
+                <div class="item-content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <hr>
+                        </div>
+                        <div class="col-md-4">
+                            <span>نام دانش آموز</span>
+                            <h3 class="text-dark-medium font-medium"><a
+                                    href="{% url 'main:student_detail' employment_form.student.pk %}"><b>
+                                {{ employment_form.student }}</b></a></h3>
+                        </div>
+                        <div class="col-md-4">
+                            <span>ارگان مورد نظر</span>
+                            <h3 class="text-dark-medium font-medium">{{ employment_form.organ }}</h3>
+                        </div>
+                        <div class="col-md-4">
+                            <span>وضعیت</span>
+                            {% if request.user.is_superuser or request.user.is_manager %}
+                            <div class="dropdown">
+                                <input type="hidden" class="d-none" id="emp_form_id"
+                                       value="{{ request.resolver_match.kwargs.pk }}">
+                                <button class="btn btn-{% if employment_form.status == 'بررسی شده' %}success{% elif employment_form.status == 'در انتظار بررسی'  %}warning{% elif employment_form.status == 'رد شده'  %}danger{% endif %} dropdown-toggle"
+                                        type="button" id="statusForm"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{ employment_form.status }}
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="dropdown-item statusEMP">بررسی شده</button>
+                                    <button class="dropdown-item statusEMP">در انتظار بررسی</button>
+                                    <button class="dropdown-item statusEMP">رد شده</button>
+                                </div>
+                            </div>
+                            {% else %}
+                            <h3 class="badge badge-{% if employment_form.status == 'بررسی شده' %}success{% elif employment_form.status == 'در انتظار بررسی'  %}warning{% elif employment_form.status == 'رد شده'  %}danger{% endif %}">
+                                {{ employment_form.status }}
+                            </h3>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12">
+                            <hr>
+                        </div>
+                        <div class="col-md-8">
+                            {% if request.user.is_superuser or request.user.is_manager %}
+                            <h3>آپلود فرم برای دانش آموز:</h3>
+                            <input type="file" accept="image/*" id="img_form" onchange="loadFile(event)">
+                            {% if employment_form.form_image %}
+                            <button class="btn btn-warning"
+                                    onclick="PrintImage('{{ employment_form.form_image.url }}')">
+                                    <i class="fas fa-print"></i> چاپ فرم</button>
+                            {% endif %}
+                            {% elif request.user.is_superuser or request.user.is_manager or request.user.is_student %}
+                            {% if employment_form.form_image %}
+                            <button class="btn btn-warning" onclick="PrintImage('{{ employment_form.form_image.url }}')"><i class="fas fa-print"></i> چاپ فرم</button>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <img src="{% if employment_form.form_image %}{{ employment_form.form_image.url }}{% endif %}" alt="{{ employment_form.name }}"
+                                 class="ml-0" id="img_output">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block js_files %}
+<script src='{% static "js/class_and_attendance.js" %}'></script>
+{% endblock js_files %}

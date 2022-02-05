@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+<div class="m-2">
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        {% if request.resolver_match.url_name == "student_list" %}
+        <h3>لیست دانش آموزان</h3>
+        <a href="{% url 'manager:student_create' %}" class="btn">ساخت دانش آموز</a>
+        {% elif request.resolver_match.url_name == "parent_list" %}
+        <h3>لیست والدین</h3>
+        <a href="{% url 'manager:parent_create' %}" class="btn">ساخت والد یا قیم</a>
+        {% elif request.resolver_match.url_name == "teacher_list" %}
+        <h3>لیست دبیران</h3>
+        <a href="{% url 'manager:teacher_create' %}" class="btn">ساخت دبیر</a>
+        {% endif %}
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card dashboard-card-eleven">
+                <div class="card-body user_list">
+                    <div class="table-box-wrap">
+                        {% if request.resolver_match.url_name == 'student_list' %}
+
+                        <form class="search-form-box">
+
+                            <div class="row gutters-8">
+                                <div class="col-3-xxxl col-xl-3 col-lg-3 col-12 form-group">
+                                    <span class="small mb-1">فیلتر بر اساس مقطع</span>
+                                    <div class="d-block">
+                                        {{ filter.form.grade }}
+                                    </div>
+                                </div>
+                                {% if majors %}
+                                <div class="col-lg-3 col-12 form-group">
+                                    <span class="small mb-1">فیلتر بر اساس رشته</span>
+                                    <div class="d-block">
+                                        {{ filter.form.major }}
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="small mb-1">جستجو بر اساس نام</span>
+                                    </div>
+                                    <div class="col-lg-5 col-6 form-group">
+                                        {{ filter.form.full_name }}
+                                    </div>
+                                    <div class="col-lg-3 col-6 form-group">
+                                        <button type="submit" class="btn search_btn">جستجو
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="table-responsive student-table-box">
+                            <table class="table display data-table text-nowrap">
+                                <thead>
+                                <tr>
+                                    <th>عکس</th>
+                                    <th>نام و نام خانوادگی</th>
+                                    <th>کدملی</th>
+                                    <th>مقطع</th>
+                                    <th>رشته</th>
+                                    <th>والد یا قیم</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                {% if filter.qs %}
+                                {% for person in filter.qs %}
+                                <tr class="filter">
+                                    <td class="text-right">
+                                        {% if person.profile_img %}
+                                        <a href="{% if request.resolver_match.url_name == 'student_list' %}{% url 'main:student_detail' person.pk %}{% elif request.resolver_match.url_name == 'parent_list' %}{% elif request.resolver_match.url_name == 'teacher_list' %}{% endif %}">
+                                            <img src="{{ person.profile_img.url }}" alt="{{ person.national_code }}">
+                                        </a>
+                                        {% else %}
+                                        <a href="{% if request.resolver_match.url_name == 'student_list' %}{% url 'main:student_detail' person.pk %}{% elif request.resolver_match.url_name == 'parent_list' %}{% url 'main:parent_detail' person.pk %}{% elif request.resolver_match.url_name == 'teacher_list' %}{% endif %}">
+                                            <img src="{% static 'img/user_image.png' %}"
+                                                 alt="{{ person.national_code }}">
+                                        </a>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% if request.resolver_match.url_name == 'student_list' %}{% url 'main:student_detail' person.pk %}{% elif request.resolver_match.url_name == 'parent_list' %}{% url 'main:parent_detail' person.pk %}{% elif request.resolver_match.url_name == 'teacher_list' %}{% endif %}">
+                                            {{ person.get_full_name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ person.national_code }}</td>
+                                    <td>{{ person.grade }}</td>
+                                    <td>{{ person.major }}</td>
+                                    <td><a href="{% url 'main:parent_detail' person.parent.pk %}"><b>
+                                        {{ person.parent.get_full_name }}</b></a></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                                               aria-expanded="false">
+                                                <span class="flaticon-more-button-of-three-dots"></span>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item"
+                                                   href="{% if request.resolver_match.url_name == 'student_list' %}{% url 'manager:student_update' person.pk %}{% elif request.resolver_match.url_name == 'parent_list' %}{% elif request.resolver_match.url_name == 'teacher_list' %}{% endif %}"><i
+                                                        class="fas fa-cogs text-dark-pastel-green"></i>ویرایش</a>
+                                                <a class="dropdown-item" href="{% url 'manager:student_list' %}"><i
+                                                        class="fas fa-redo-alt text-orange-peel"></i>تازه کردن</a>
+                                                <a class="dropdown-item"
+                                                   href="{% if request.resolver_match.url_name == 'student_list' %}{% url 'manager:student_delete' person.pk %}{% elif request.resolver_match.url_name == 'parent_list' %}{% elif request.resolver_match.url_name == 'teacher_list' %}{% endif %}"><i
+                                                        class="fas fa-times text-orange-red"></i>حذف</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td><h3 class="text-danger text-center m-auto">کاربری یافت نشد</h3></td>
+                                </tr>
+                                {% endif %}
+                                </tbody>
+
+                            </table>
+                        </div>
+                        {% elif request.resolver_match.url_name == 'parent_list' %}
+                        <form class="search-form-box">
+                            <div class="row gutters-8">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="small mb-1">جستجو بر اساس نام</span>
+                                    </div>
+                                    <div class="col-lg-5 col-6 form-group">
+                                        {{ filter.form.full_name }}
+                                    </div>
+                                    <div class="col-lg-3 col-6 form-group">
+                                        <button type="submit" class="btn search_btn">جستجو
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="table-responsive student-table-box">
+                            <table class="table display data-table text-nowrap">
+                                <thead>
+                                <tr>
+                                    <th>عکس</th>
+                                    <th>نام و نام خانوادگی</th>
+                                    <th>کدملی</th>
+                                    <th>شماره محل کار</th>
+                                    <th>شماره تلفن</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for person in filter.qs %}
+                                <tr class="filter">
+                                    <td class="text-right">
+                                        {% if person.profile_img %}
+                                        <a href="{% if request.resolver_match.url_name == 'student_list' %}{% url 'main:student_detail' person.pk %}{% elif request.resolver_match.url_name == 'parent_list' %}{% url 'main:parent_detail' person.pk %}{% elif request.resolver_match.url_name == 'teacher_list' %}{% endif %}">
+                                            <img src="{{ person.profile_img.url }}" alt="{{ person.national_code }}">
+                                        </a>
+                                        {% else %}
+                                        <a href="{% if request.resolver_match.url_name == 'student_list' %}{% url 'main:student_detail' person.pk %}{% elif request.resolver_match.url_name == 'parent_list' %}{% url 'main:parent_detail' person.pk %}{% elif request.resolver_match.url_name == 'teacher_list' %}{% endif %}">
+                                            <img src="{% static 'img/user_image.png' %}"
+                                                 alt="{{ person.national_code }}">
+                                        </a>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% if request.resolver_match.url_name == 'student_list' %}{% url 'main:student_detail' person.pk %}{% elif request.resolver_match.url_name == 'parent_list' %}{% url 'main:parent_detail' person.pk %}{% elif request.resolver_match.url_name == 'teacher_list' %}{% endif %}">
+                                            {{ person.get_full_name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ person.national_code }}</td>
+                                    <td>
+                                        {% if person.work_phone %}
+                                        {{ person.work_phone }}
+                                        {% else %}
+                                        -
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ person.phone }}</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                                               aria-expanded="false">
+                                                <span class="flaticon-more-button-of-three-dots"></span>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item"
+                                                   href="{% if request.resolver_match.url_name == 'student_list' %}{% url 'manager:student_update' person.pk %}{% elif request.resolver_match.url_name == 'parent_list' %}{% url 'manager:parent_update' person.pk %}{% elif request.resolver_match.url_name == 'teacher_list' %}{% endif %}"><i
+                                                        class="fas fa-cogs text-dark-pastel-green"></i>ویرایش</a>
+                                                <a class="dropdown-item" href="{% url 'manager:parent_list' %}"><i
+                                                        class="fas fa-redo-alt text-orange-peel"></i>تازه کردن</a>
+                                                <a class="dropdown-item"
+                                                   href="{% if request.resolver_match.url_name == 'student_list' %}{% url 'manager:student_delete' person.pk %}{% elif request.resolver_match.url_name == 'parent_list' %}{% url 'manager:parent_delete' person.pk %}{% elif request.resolver_match.url_name == 'teacher_list' %}{% endif %}"><i
+                                                        class="fas fa-times text-orange-red"></i>حذف</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% elif request.resolver_match.url_name == 'teacher_list' %}
+                        <form class="search-form-box">
+                            <div class="row gutters-8">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="small mb-1">جستجو بر اساس نام</span>
+                                    </div>
+                                    <div class="col-lg-5 col-6 form-group">
+                                        {{ filter.form.full_name }}
+                                    </div>
+                                    <div class="col-lg-3 col-6 form-group">
+                                        <button type="submit" class="btn search_btn">جستجو
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="table-responsive student-table-box">
+                            <table class="table display data-table text-nowrap">
+                                <thead>
+                                <tr>
+                                    <th>عکس</th>
+                                    <th>نام و نام خانوادگی</th>
+                                    <th>کدملی</th>
+                                    <th>شماره منزل</th>
+                                    <th>شماره تلفن</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for person in filter.qs %}
+                                <tr class="filter">
+                                    <td class="text-right">
+                                        {% if person.profile_img %}
+                                        <a href="{% url 'main:teacher_detail' person.pk %}">
+                                            <img src="{{ person.profile_img.url }}" alt="{{ person.national_code }}">
+                                        </a>
+                                        {% else %}
+                                        <a href="{% url 'main:teacher_detail' person.pk %}">
+                                            <img src="{% static 'img/user_image.png' %}"
+                                                 alt="{{ person.national_code }}">
+                                        </a>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'main:teacher_detail' person.pk %}">
+                                            {{ person.get_full_name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ person.national_code }}</td>
+                                    <td>{{ person.home_phone }}</td>
+                                    <td>{{ person.phone }}</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                                               aria-expanded="false">
+                                                <span class="flaticon-more-button-of-three-dots"></span>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item"
+                                                   href="{% url 'manager:teacher_update' person.pk %}"><i
+                                                        class="fas fa-cogs text-dark-pastel-green"></i>ویرایش</a>
+                                                <a class="dropdown-item" href="{% url 'manager:teacher_list' %}"><i
+                                                        class="fas fa-redo-alt text-orange-peel"></i>تازه کردن</a>
+                                                <a class="dropdown-item"
+                                                   href="{% url 'manager:teacher_delete' person.pk %}"><i
+                                                        class="fas fa-times text-orange-red"></i>حذف</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

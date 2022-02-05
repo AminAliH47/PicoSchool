@@ -1,0 +1,84 @@
+{% load static %}
+<div class="card dashboard-card-four pd-b-20" id="MEventCalendar">
+    <div class="card-body">
+        <div class="heading-layout1">
+            <div class="item-title">
+                <a href="{% url 'main:events' %}"><h3>تقویم رویداد</h3></a>
+            </div>
+            <div class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                   aria-expanded="false">...</a>
+
+                <div class="dropdown-menu dropdown-menu-right">
+                    {% if request.user.is_superuser or request.user.is_manager %}
+                    <a class="dropdown-item" href="{% url 'manager:calendar' %}"><i
+                            class="fas fa-cogs text-dark-pastel-green"></i>ویرایش</a>
+                    {% endif %}
+                    <a class="dropdown-item" href="{% url 'main:events' %}"><i
+                            class="far fa-calendar-alt text-blue"></i>رویداد ها</a>
+                    <a class="dropdown-item" href="{{ request.path }}#MEventCalendar"><i
+                            class="fas fa-redo-alt text-orange-peel"></i>تازه کردن</a>
+                </div>
+            </div>
+        </div>
+        <div class="calender-wrap">
+            <div id="calendar"></div>
+        </div>
+    </div>
+</div>
+{% block js_files %}
+<!-- Calendar Js -->
+<script src="{% static 'manager/fullcalendar/main.min.js' %}"></script>
+<script src="{% static 'manager/js/moment-with-locales.min.js' %}"></script>
+<script src="{% static 'manager/fullcalendar-daygrid/main.min.js' %}"></script>
+<script src="{% static 'manager/fullcalendar-timegrid/main.min.js' %}"></script>
+<script src="{% static 'manager/fullcalendar-interaction/main.min.js' %}"></script>
+<script src="{% static 'manager/fullcalendar-bootstrap/main.min.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    var calendarEl = document.getElementById("calendar");
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: ["bootstrap", "interaction", "dayGrid", "timeGrid"],
+
+        eventColor: "#007bff",
+        timeZone: "Asia/Tehran",
+        locale: "fa",
+        selectable: true,
+        eventDidMount: function (info) {
+            var tooltip = new Tooltip(info.el, {
+                title: info.event.extendedProps.description,
+                placement: "top",
+                trigger: "hover",
+                container: "body",
+            });
+        },
+        events: [
+            {% for event in events %}
+            {
+                id: "{{ event.id }}",
+                title: "{{ event.title }}",
+                start: "{{ event.start }}",
+                end: "{{ event.end }}",
+                description: "{{ event.description }}",
+                backgroundColor: "{{ event.backgroundColor }}",
+                borderColor: "{{ event.borderColor }}",
+            },
+            {% endfor %}
+        ],
+        eventClick: function (info) {
+            if (info.event.extendedProps.description != "None") document.getElementById("eventModalBody").innerHTML = `${info.event.extendedProps.description}`;
+            else document.getElementById("eventModalBody").innerHTML = "توضیحی برای این رویداد وجود ندارد!";
+            document.getElementById("eventModalHeader").innerHTML = info.event.title;
+            $("#exampleModalCenter").modal("show");
+        },
+    });
+    var mediaQuery = window.matchMedia("(max-width: 768px)");
+    if (mediaQuery.matches) {
+        calendar.setOption("height", 500);
+    }
+    calendar.render();
+});
+
+</script>
+{% endblock %}

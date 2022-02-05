@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="m-2">
+    {% if request.resolver_match.url_name == "class_list" %}
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        <h3>لیست کلاس ها</h3>
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card dashboard-card-eleven">
+                <div class="card-body user_list">
+                    <div class="table-box-wrap">
+                        <form class="search-form-box">
+                            <div class="row gutters-8">
+                                <div class="col-3-xxxl col-xl-3 col-lg-3 col-12 form-group">
+                                    <span class="small mb-1">فیلتر بر اساس مقطع</span>
+                                    <div class="d-block">
+                                        {{ filter.form.grade }}
+                                    </div>
+                                </div>
+                                {% if majors %}
+                                <div class="col-lg-3 col-12 form-group">
+                                    <span class="small mb-1">فیلتر بر اساس رشته</span>
+                                    <div class="d-block">
+                                        {{ filter.form.major }}
+                                    </div>
+                                </div>
+                                {% endif %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="small mb-1">جستجو بر اساس نام</span>
+                                    </div>
+                                    <div class="col-lg-5 col-6 form-group">
+                                        {{ filter.form.name }}
+                                    </div>
+                                    <div class="col-lg-3 col-6 form-group">
+                                        <button type="submit" class="btn search_btn">جستجو
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="table-responsive student-table-box">
+                            <table class="table display data-table text-nowrap">
+                                <thead>
+                                <tr>
+                                    <th>نام کلاس</th>
+                                    <th>مقطع</th>
+                                    <th>رشته</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for class in filter.qs %}
+                                <tr class="filter">
+                                    <td><a href="{% url 'main:class_detail' class.pk %}"><b>{{ class.name }}</b></a>
+                                    </td>
+                                    <td>{{ class.grade }}</td>
+                                    <td>{{ class.major }}</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                                               aria-expanded="false">
+                                                <span class="flaticon-more-button-of-three-dots"></span>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item"
+                                                   href="{% url 'main:class_detail' class.pk %}"><i
+                                                        class="fas fa-cogs text-dark-pastel-green"></i>جزئیات</a>
+                                                <a class="dropdown-item" href="{% url 'main:class_list' %}"><i
+                                                        class="fas fa-redo-alt text-orange-peel"></i>تازه کردن</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td>
+                                        <p class="text-danger font-weight-bold">نتیجه ای وجود ندارد</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% elif request.resolver_match.url_name == "home_work_list" %}
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        <h3>لیست تکالیف</h3>
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card dashboard-card-eleven">
+                <div class="card-body user_list">
+                    <div class="table-box-wrap">
+                        <div class="table-responsive student-table-box">
+                            <table class="table display data-table text-nowrap">
+                                <thead>
+                                <tr>
+                                    <th>عنوان</th>
+                                    <th>تاریخ</th>
+                                    <th>درس</th>
+                                    {% if request.user.is_superuser or request.user.is_manager %}
+                                    <th>کلاس</th>
+                                    {% endif %}
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for hw in home_works %}
+                                <tr class="filter">
+                                    <td><a href="{% url 'main:home_work_detail' hw.pk %}"><b>{{ hw.title }}</b></a>
+                                    </td>
+                                    <td>{{ hw.date }}</td>
+                                    <td>{{ hw.attendance.book }}</td>
+                                    {% if request.user.is_superuser or request.user.is_manager %}
+                                    <td>{{ hw.attendance.attendance_class }}</td>
+                                    {% endif %}
+                                    <td>
+                                        <div class="dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                                               aria-expanded="false">
+                                                <span class="flaticon-more-button-of-three-dots"></span>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item"
+                                                   href="{% url 'main:home_work_detail' hw.pk %}"><i
+                                                        class="fas fa-cogs text-dark-pastel-green"></i>جزئیات</a>
+                                                <a class="dropdown-item" href=""><i
+                                                        class="fas fa-redo-alt text-orange-peel"></i>تازه کردن</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td>
+                                        <p class="text-danger font-weight-bold">نتیجه ای وجود ندارد</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% elif request.resolver_match.url_name == "employment_form_list" %}
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        <h3>لیست فرم های اشتغال به تحصیل</h3>
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card dashboard-card-eleven">
+                <div class="card-body user_list">
+                    <div class="table-box-wrap">
+                        <form class="search-form-box">
+                            <div class="row gutters-8">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="small mb-1">فیلتر بر اساس وضعیت</span>
+                                    </div>
+                                    <div class="col-lg-5 col-6 form-group">
+                                        {{ filter.form.status }}
+                                    </div>
+                                    <div class="col-lg-3 col-6 form-group">
+                                        <button type="submit" class="btn search_btn">جستجو
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="table-responsive student-table-box">
+                            <table class="table display data-table text-nowrap">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>نام دانش آموز</th>
+                                    <th>اُرگان مورد نظر</th>
+                                    <th>وضعیت</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for emp_form in filter.qs %}
+                                <tr class="filter">
+                                    <td>{{ emp_form.id }}</td>
+                                    <td><a href="{% url 'main:employment_form_detail' emp_form.pk %}"><b>{{ emp_form.student }}</b></a>
+                                    </td>
+                                    <td>{{ emp_form.organ|truncatechars:10 }}</td>
+                                    <td><div class="badge p-2 badge-{% if emp_form.status == 'بررسی شده' %}success{% elif emp_form.status == 'در انتظار بررسی'  %}warning{% elif emp_form.status == 'رد شده'  %}danger{% endif %}">{{ emp_form.status }}</div> </td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                                               aria-expanded="false">
+                                                <span class="flaticon-more-button-of-three-dots"></span>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item"
+                                                   href="{% url 'main:employment_form_detail' emp_form.pk %}"><i
+                                                        class="fas fa-cogs text-dark-pastel-green"></i>جزئیات</a>
+                                                <a class="dropdown-item" href="{% url 'main:employment_form_list' %}"><i
+                                                        class="fas fa-redo-alt text-orange-peel"></i>تازه کردن</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td>
+                                        <p class="text-danger font-weight-bold">نتیجه ای وجود ندارد</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class="m-3 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 m-auto">
+                <!-- THE CALENDAR -->
+                <div class="p-1">
+                    {% include "event_calendar.html" %}
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

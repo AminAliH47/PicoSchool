@@ -1,0 +1,363 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+<!-- Main content -->
+<style>
+    .fc-event-container {
+        cursor: pointer;
+    }
+</style>
+<div class="m-3 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sticky-top mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">اضافه کردن رویداد</h4>
+                        </div>
+                        <div class="card-body">
+                            <!-- the events -->
+                            <div id="external-events">
+                                {% for event in ex_events %}
+                                <div class="external-event ui-draggable ui-draggable-handle"
+                                     id="{{ event.id }}" style="background-color: {{ event.backgroundColor }}; border-color: {{ event.borderColor }}; position: relative;">
+                                    {{ event.title }}
+                                </div>
+                                {% endfor %}
+                                <div class="checkbox">
+                                    <label for="drop-remove">
+                                        <input type="checkbox" id="drop-remove">
+                                        حذف بعد از اضافه شدن
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    {% csrf_token %}
+                    <!-- /.card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">ساخت رویداد</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
+                                <!--<button type="button" id="color-chooser-btn" class="btn btn-info btn-block dropdown-toggle" data-toggle="dropdown">Color <span class="caret"></span></button>-->
+                                <ul class="fc-color-picker" id="color-chooser">
+                                    <li><a class="text-blue" href="#"><i class="fas fa-square"></i></a></li>
+                                    <li><a class="text-yellow" href="#"><i class="fas fa-square"></i></a></li>
+                                    <li><a class="text-green" href="#"><i class="fas fa-square"></i></a></li>
+                                    <li><a class="text-red" href="#"><i class="fas fa-square"></i></a></li>
+                                    <li><a class="text-muted" href="#"><i class="fas fa-square"></i></a></li>
+                                </ul>
+                            </div>
+                            <!-- /btn-group -->
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <button id="add-new-event" type="button" class="btn btn-primary">اضافه</button>
+                                </div>
+                                <input id="new-event" type="text" class="form-control" placeholder="عنوان رویداد">
+
+                                <!-- /btn-group -->
+                            </div>
+                            <!-- /input-group -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+                <div class="card card-primary">
+                    <div class="card-body p-0">
+                        <!-- THE CALENDAR -->
+                        <div class="p-1">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js_files %}
+<!-- Calendar Js -->
+<script src="{% static 'manager/fullcalendar/main.min.js' %}"></script>
+<script src="{% static 'manager/js/moment-with-locales.min.js' %}"></script>
+<script src="{% static 'manager/fullcalendar-daygrid/main.min.js' %}"></script>
+<script src="{% static 'manager/fullcalendar-timegrid/main.min.js' %}"></script>
+<script src="{% static 'manager/fullcalendar-interaction/main.min.js' %}"></script>
+<script src="{% static 'manager/fullcalendar-bootstrap/main.min.js' %}"></script>
+<script>
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+});
+$(function () {
+    /* initialize the external events
+         -----------------------------------------------------------------*/
+    function ini_events(ele) {
+        ele.each(function () {
+            // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+            // it doesn't need to have a start or end
+            var eventObject = {
+                title: $.trim($(this).text()), // use the element's text as the event title
+            };
+
+            // store the Event Object in the DOM element so we can get to it later
+            $(this).data("eventObject", eventObject);
+
+            // make the event draggable using jQuery UI
+            $(this).draggable({
+                zIndex: 1070,
+                revert: true, // will cause the event to go back to its
+                revertDuration: 0, //  original position after the drag
+            });
+        });
+    }
+
+    ini_events($("#external-events div.external-event"));
+
+    /* initialize the calendar
+         -----------------------------------------------------------------*/
+    //Date for the calendar events (dummy data)
+    var date = new Date();
+    var d = date.getDate(),
+        m = date.getMonth(),
+        y = date.getFullYear();
+
+    var Calendar = FullCalendar.Calendar;
+    var Draggable = FullCalendarInteraction.Draggable;
+
+    var containerEl = document.getElementById("external-events");
+    var checkbox = document.getElementById("drop-remove");
+    var calendarEl = document.getElementById("calendar");
+
+    // initialize the external events
+    // -----------------------------------------------------------------
+
+    new Draggable(containerEl, {
+        itemSelector: ".external-event",
+        eventData: function (eventEl) {
+            console.log(eventEl);
+            return {
+                //id:eventEl.id = Date.now(),
+                title: eventEl.innerText,
+                backgroundColor: window.getComputedStyle(eventEl, null).getPropertyValue("background-color"),
+                borderColor: window.getComputedStyle(eventEl, null).getPropertyValue("background-color"),
+                textColor: window.getComputedStyle(eventEl, null).getPropertyValue("color"),
+            };
+        },
+    });
+
+    var calendar = new Calendar(calendarEl, {
+        plugins: ["bootstrap", "interaction", "dayGrid", "timeGrid"],
+        header: {
+            left: "prev,next today",
+            center: "title",
+            right: "dayGridMonth,timeGridWeek,timeGridDay",
+        },
+        timeZone: "Asia/Tehran",
+        eventColor: "#007bff",
+        locale: "fa", // the initial locale
+        //Random default events
+        selectable: true,
+
+        eventDidMount: function (info) {
+            var tooltip = new Tooltip(info.el, {
+                title: info.event.extendedProps.description,
+                placement: "top",
+                trigger: "hover",
+                container: "body",
+            });
+        },
+        events: [
+            {% for event in events %}
+            {
+                id: "{{ event.id }}",
+                title: "{{ event.title }}",
+                backgroundColor: "{{ event.backgroundColor }}",
+                borderColor: "{{ event.borderColor }}",
+                description: "{{ event.description }}",
+                start: "{{ event.start }}",
+                end: "{{ event.end }}",
+            },
+            {% endfor %}
+        ],
+        eventClick: function (info) {
+            //document.getElementById('eventModalBody').innerHTML = `${info.event.extendedProps.description}`;
+            document.getElementById("eventModalHeader").innerHTML = info.event.title;
+            document.getElementById("event_id").value = info.event.id;
+            let textarea = document.getElementById("eventDesc");
+            if (info.event.extendedProps.description != "None") textarea.innerText = info.event.extendedProps.description;
+            else textarea.innerText = "";
+            $("#exampleModalCenter").modal("show");
+        },
+        editable: true,
+        droppable: true, // this allows things to be dropped onto the calendar !!!
+        eventDrop: function (info) {
+            if (info.event.end != null) {
+                var end = info.event.end.toISOString();
+            } else {
+                var end = "";
+            }
+            let start = info.event.start.toISOString();
+
+            $.ajax({
+                url: "/manager/update-event/",
+                method: "POST",
+                data: {
+                    id: info.event.id,
+                    start: start,
+                    end: end,
+                    csrfmiddlewaretoken: csrf,
+                },
+                success: function () {},
+                error: function () {
+                    alert("ناموفق!");
+                },
+            });
+        },
+        eventResize: function (info) {
+            //alert(info.event.title + " end is now " + info.event.end.toISOString());
+
+            if (!confirm("آیا از این تغییر مطمئن هستید؟")) {
+                info.revert();
+            } else {
+                let end = info.event.end.toISOString();
+                let start = info.event.start.toISOString();
+
+                $.ajax({
+                    url: "/manager/update-event/",
+                    method: "POST",
+                    data: {
+                        id: info.event.id,
+                        start: start,
+                        end: end,
+                        csrfmiddlewaretoken: csrf,
+                    },
+                    success: function () {},
+                    error: function () {
+                        alert("ناموفق!");
+                    },
+                });
+            }
+        },
+        drop: function (info) {
+            console.log(info.draggedEl.id);
+            $.ajax({
+                url: "/manager/add-event/",
+                method: "POST",
+                data: {
+                    id: Date.now(),
+                    title: info.draggedEl.innerText,
+                    start: info.dateStr,
+                    backgroundColor: window.getComputedStyle(info.draggedEl, null).getPropertyValue("background-color"),
+                    csrfmiddlewaretoken: csrf,
+                },
+                success: function () {},
+                error: function () {
+                    alert("ناموفق!");
+                },
+            });
+            // is the "remove after drop" checkbox checked?
+            if (checkbox.checked) {
+                // if so, remove the element from the "Draggable Events" list
+                info.draggedEl.parentNode.removeChild(info.draggedEl);
+                $.ajax({
+                    url: "/manager/delete-ex-event/",
+                    method: "POST",
+                    data: {
+                        id: info.draggedEl.id,
+                        csrfmiddlewaretoken: csrf,
+                    },
+                    success: function () {},
+                    error: function () {
+                        alert("مشکلی پیش آمده");
+                    },
+                });
+            }
+        },
+    });
+    var mediaQuery = window.matchMedia("(max-width: 768px)");
+    if (mediaQuery.matches) {
+        calendar.setOption("height", 500);
+    }
+    calendar.render();
+    // $('#calendar').fullCalendar({
+    //   lang: 'fa'
+    // });
+
+    /* ADDING EVENTS */
+    var currColor = "#007bff"; //Red by default
+    //Color chooser button
+    var colorChooser = $("#color-chooser-btn");
+    $("#color-chooser > li > a").click(function (e) {
+        e.preventDefault();
+        //Save color
+        currColor = $(this).css("color");
+        //Add color effect to button
+        $("#add-new-event").css({
+            "background-color": currColor,
+            "border-color": currColor,
+        });
+    });
+    $("#add-new-event").click(function (e) {
+        e.preventDefault();
+        //Get value and make sure it is not null
+        var val = $("#new-event").val();
+
+        if (val.length == 0) {
+            return;
+        }
+
+        //Create events
+        var event = $("<div />");
+        event
+            .css({
+                "background-color": currColor,
+                "border-color": currColor,
+                color: "#fff",
+            })
+            .addClass("external-event");
+        var id = Date.now();
+        event[0].id = id;
+        event[0].name = id.toString();
+        event.html(val);
+        console.log(event);
+        if (!confirm("آیا از اضافه کردن رویداد اطمینان دارید؟")) {
+        } else {
+            $("#external-events").prepend(event);
+            console.log(csrf);
+            $.ajax({
+                url: "/manager/add-ex-event/",
+                method: "POST",
+                data: {
+                    id: event[0].id,
+                    title: event[0].innerText,
+                    backgroundColor: event[0].style.backgroundColor,
+                    csrfmiddlewaretoken: csrf,
+                },
+                success: function () {},
+                error: function () {
+                    alert("ناموفق!");
+                },
+            });
+        }
+
+        //Add draggable funtionality
+        ini_events(event);
+
+        //Remove event from text input
+        $("#new-event").val("");
+    });
+});
+</script>
+{% endblock js_files %}

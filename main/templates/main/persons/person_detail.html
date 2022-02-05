@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block main %}
+<div class="m-2">
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        <h3>{{ person.get_full_name }}</h3>
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <!-- Student Details Area Start Here -->
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="heading-layout1">
+                <div class="item-title">
+                    <h3>{{ person.id }}</h3>
+                </div>
+            </div>
+            <div class="single-info-details">
+                <div class="item-img">
+                    {% if person.profile_img %}
+                    <img src="{{ person.profile_img.url }}" alt="{{ person.national_code }}" width="250px">
+                    {% else %}
+                    <img src="{% static 'img/user_image.png' %}" alt="{{ person.national_code }}" width="250px">
+                    {% endif %}
+                </div>
+                <div class="item-content">
+                    <div class="header-inline item-header">
+                        <h3 class="text-dark-medium font-medium">{{ person.get_full_name }}</h3>
+                        {% if request.user.is_superuser or request.user.is_manager %}
+                        <div class="header-elements">
+                            <ul>
+                                <li>
+                                    <a href="{% if request.resolver_match.url_name == 'student_detail' %}{% url 'manager:student_update' person.pk %}{% elif request.resolver_match.url_name == 'parent_detail' %}{% url 'manager:parent_update' person.pk %}{% elif request.resolver_match.url_name == 'teacher_detail' %}{% url 'manager:teacher_update' person.pk %}{% endif %}"><i
+                                            class="far fa-edit large" style="font-size: x-large;"></i></a></li>
+                            </ul>
+                        </div>
+                        {% else %}
+                        <div class="header-elements">
+                            <ul>
+                                <li><a href="{% url 'account:change_password' %}" class="btn btn-warning"
+                                       style="background-color:#ffc107;">تغییر گذرواژه</a></li>
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="info-table table-responsive">
+                        <table class="table text-nowrap">
+                            {% if request.resolver_match.url_name == "student_detail" %}
+                            <tbody>
+                            <tr>
+                                <td><p class="form-group-title">اطلاعات عمومی</p></td>
+                            </tr>
+                            <tr>
+                                <td>کد ملی:</td>
+                                <td class="font-medium text-dark-medium">{{ person.national_code }}</td>
+                            </tr>
+                            <tr>
+                                <td>نام و نام خانوادگی:</td>
+                                <td class="font-medium text-dark-medium">{{ person.get_full_name }}</td>
+                            </tr>
+                            <tr>
+                                <td>نام پدر:</td>
+                                <td class="font-medium text-dark-medium">{{ person.father_name }}</td>
+                            </tr>
+                            <tr>
+                                <td>تاریخ تولد:</td>
+                                <td class="font-medium text-dark-medium">{{ person.date_of_birth }}</td>
+                            </tr>
+                            <tr>
+                                <td><p class="form-group-title">تلفن ها</p></td>
+                            </tr>
+                            <tr>
+                                <td>تلفن:</td>
+                                {% if person.phone %}
+                                <td class="font-medium text-dark-medium">{{ person.phone }}</td>
+                                {% else %}
+                                <td class="font-medium text-dark-medium">ندارد</td>
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <td>تلفن منزل:</td>
+                                <td class="font-medium text-dark-medium">{{ person.home_phone }}</td>
+                            </tr>
+                            <tr>
+                                <td><p class="form-group-title">بیشتر</p></td>
+                            </tr>
+                            <tr>
+                                <td>کلاس:</td>
+                                <td class="font-medium text-dark-medium">
+                                    {% if request.user.is_superuser or request.user.is_manager %}
+                                    <a href="{% url 'main:class_detail' person.student_class.pk %}"><b>
+                                        {{ person.student_class }}</b></a>
+                                    {% else %}
+                                    {{ person.student_class }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>مقطع:</td>
+                                <td class="font-medium text-dark-medium">{{ person.grade }}</td>
+                            </tr>
+                            <tr>
+                                <td>حساب والدین:</td>
+                                <td class="font-medium text-dark-medium">{{ person.parent.get_full_name }}</td>
+                            </tr>
+                            {% if majors %}
+                            <tr>
+                                <td>رشته:</td>
+                                <td class="font-medium text-dark-medium">{{ person.major }}</td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <td><p class="form-group-title">آدرس منزل</p></td>
+                            </tr>
+                            <tr>
+                                <td>آدرس:</td>
+                                <td class="font-medium text-dark-medium">{{ person.address }}</td>
+                            </tr>
+                            </tbody>
+                            {% elif request.resolver_match.url_name == "parent_detail" %}
+                            <tbody>
+                            <tr>
+                                <td><p class="form-group-title">اطلاعات عمومی</p></td>
+                            </tr>
+                            <tr>
+                                <td>کد ملی:</td>
+                                <td class="font-medium text-dark-medium">{{ person.national_code }}</td>
+                            </tr>
+                            <tr>
+                                <td>نام و نام خانوادگی:</td>
+                                <td class="font-medium text-dark-medium">{{ person.get_full_name }}</td>
+                            </tr>
+                            <tr>
+                                <td>تحصیلات:</td>
+                                <td class="font-medium text-dark-medium">{{ person.education }}</td>
+                            </tr>
+                            <tr>
+                                <td>شغل:</td>
+                                <td class="font-medium text-dark-medium">{{ person.job }}</td>
+                            </tr>
+                            <tr>
+                                <td>تاریخ تولد:</td>
+                                <td class="font-medium text-dark-medium">{{ person.date_of_birth }}</td>
+                            </tr>
+                            <tr>
+                                <td><p class="form-group-title">تلفن ها</p></td>
+                            </tr>
+                            <tr>
+                                <td>تلفن:</td>
+                                {% if person.phone %}
+                                <td class="font-medium text-dark-medium">{{ person.phone }}</td>
+                                {% else %}
+                                <td class="font-medium text-dark-medium">ندارد</td>
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <td>تلفن منزل:</td>
+                                <td class="font-medium text-dark-medium">{{ person.home_phone }}</td>
+                            </tr>
+                            <tr>
+                                <td>تلفن محل کار:</td>
+                                <td class="font-medium text-dark-medium">{{ person.work_phone }}</td>
+                            </tr>
+                            <tr>
+                                <td><p class="form-group-title">آدرس ها</p></td>
+                            </tr>
+                            <tr>
+                                <td>آدرس:</td>
+                                <td class="font-medium text-dark-medium">{{ person.address }}</td>
+                            </tr>
+                            <tr>
+                                <td>آدرس محل کار:</td>
+                                <td class="font-medium text-dark-medium">{{ person.work_address }}</td>
+                            </tr>
+                            </tbody>
+                            {% elif request.resolver_match.url_name == "teacher_detail" %}
+                            <tbody>
+                            <tr>
+                                <td><p class="form-group-title">اطلاعات عمومی</p></td>
+                            </tr>
+                            <tr>
+                                <td>کد ملی:</td>
+                                <td class="font-medium text-dark-medium">{{ person.national_code }}</td>
+                            </tr>
+                            <tr>
+                                <td>شماره شناسنامه:</td>
+                                <td class="font-medium text-dark-medium">{{ person.certificate_code }}</td>
+                            </tr>
+                            <tr>
+                                <td>نام و نام خانوادگی:</td>
+                                <td class="font-medium text-dark-medium">{{ person.get_full_name }}</td>
+                            </tr>
+                            <tr>
+                                <td>تاریخ تولد:</td>
+                                <td class="font-medium text-dark-medium">{{ person.date_of_birth }}</td>
+                            </tr>
+                            <tr>
+                                <td>مجرد یا متاهل:</td>
+                                <td class="font-medium text-dark-medium">{{ person.single_or_married }}</td>
+                            </tr>
+                            {% if person.single_or_married == "متاهل" %}
+                            <tr>
+                                <td>نام و نام خانوادگی همسر:</td>
+                                <td class="font-medium text-dark-medium">{{ person.spouse_fullname }}</td>
+                            </tr>
+                            <tr>
+                                <td>تعداد فرزندان:</td>
+                                <td class="font-medium text-dark-medium">{{ person.child_num }}</td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <td><p class="form-group-title">اطلاعات تحصیلی و شغلی</p></td>
+                            </tr>
+                            <tr>
+                                <td>تحصیلات:</td>
+                                <td class="font-medium text-dark-medium">{{ person.education }}</td>
+                            </tr>
+                            <tr>
+                                <td>دانشگاه محل تحصیلی:</td>
+                                <td class="font-medium text-dark-medium">{{ person.university }}</td>
+                            </tr>
+                            <tr>
+                                <td>حقوق پایه:</td>
+                                <td class="font-medium text-dark-medium">{{ person.basic_salary|intcomma:False }}</td>
+                            </tr>
+                            <tr>
+                                <td>تعداد ساعت های کار:</td>
+                                <td class="font-medium text-dark-medium">{{ person.working_hours }}</td>
+                            </tr>
+                            <tr>
+                                <td>وضعیت:</td>
+                                <td class="font-medium text-dark-medium">{{ person.status }}</td>
+                            </tr>
+                            <tr>
+                                <td><p class="form-group-title">تلفن ها</p></td>
+                            </tr>
+                            <tr>
+                                <td>تلفن:</td>
+                                {% if person.phone %}
+                                <td class="font-medium text-dark-medium">{{ person.phone }}</td>
+                                {% else %}
+                                <td class="font-medium text-dark-medium">ندارد</td>
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <td>تلفن منزل:</td>
+                                <td class="font-medium text-dark-medium">{{ person.home_phone }}</td>
+                            </tr>
+                            {% if person.single_or_married == "متاهل" %}
+                            <tr>
+                                <td>تلفن همسر:</td>
+                                <td class="font-medium text-dark-medium">{{ person.spouse_phone }}</td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <td><p class="form-group-title">آدرس</p></td>
+                            </tr>
+                            <tr>
+                                <td>آدرس:</td>
+                                <td class="font-medium text-dark-medium">{{ person.address }}</td>
+                            </tr>
+                            </tbody>
+                            {% endif %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if request.resolver_match.url_name == "student_detail" %}
+    <div class="row">
+        <div class="col-md-5">
+        {% include 'student_status.html' %}
+        </div>
+    </div>
+    {% block js_files %}
+    <!-- Chart Js -->
+    <script src="{% static 'js/chart.min.js' %}"></script>
+    <script src="{% static 'js/student_chart.js' %}"></script>
+    {% endblock %}
+    {% endif %}
+</div>
+{% endblock %}

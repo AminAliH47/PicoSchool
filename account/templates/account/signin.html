@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <!-- Theme CSS -->
+    {% if setting %}
+        {% if setting.SiteColor == "green" %}
+            <link rel="stylesheet" href="{% static 'css/green_theme.css' %}">
+        {% elif setting.SiteColor == "orange" %}
+            <link rel="stylesheet" href="{% static 'css/orange_theme.css' %}">
+        {% elif setting.SiteColor == "yellow" %}
+            <link rel="stylesheet" href="{% static 'css/yellow_theme.css' %}">
+        {% endif %}
+    {% else %}
+        <link rel="stylesheet" href="{% static 'css/green_theme.css' %}">
+    {% endif %}
+    <title>{{ page_title }}</title>
+</head>
+<body>
+<div class="container2" onclick="onclick">
+    <div class="top"></div>
+    <div class="bottom"></div>
+    <div class="center">
+        <h2>لطفا وارد اکانت خود شوید</h2>
+        <form method="post">{% csrf_token %}
+            {% for message in messages %}
+            <p class="badge-danger p-1 text-center"
+               style="margin: 0 10px;border-radius: 7px">
+                {{ message }}
+            </p>
+            {% endfor %}
+            <input type="text" name="username" placeholder="نام کاربری (کد ملی)"/>
+            <input type="password" name="password" placeholder="کلمه عبور"/>
+            <button type="submit" class="btn">ورود</button>
+        </form>
+
+    </div>
+</div>
+</body>
+</html>

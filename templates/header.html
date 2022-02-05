@@ -1,0 +1,164 @@
+{% load static %}
+<!-- Header Menu Area Start Here -->
+<div class="navbar navbar-expand-md header-menu-one bg-light">
+    <div class="nav-bar-header-one">
+        <div class="header-logo">
+            <a href="{% url 'account:login' %}">
+                <img src="{{ setting.school_logo.url }}" alt="{{ setting.school_name }}" width="100px"
+                     style="object-fit:scale-down;">
+            </a>
+        </div>
+        <div class="toggle-button sidebar-toggle">
+            <button onclick="openNav()" type="button" class="item-link">
+                        <span class="btn-icon-wrap">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+            </button>
+        </div>
+    </div>
+    <div class="d-md-none mobile-nav-bar">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-navbar"
+                aria-expanded="false">
+            <i class="far fa-arrow-alt-circle-down"></i>
+        </button>
+        <button onclick="openNav()" type="button" class="navbar-toggler sidebar-toggle-mobile">
+            <i id="NavTogglerMo" class="fas fa-bars"></i>
+        </button>
+    </div>
+    <div class="header-main-menu collapse navbar-collapse" id="mobile-navbar">
+        <ul class="navbar-nav">
+            <li class="navbar-item header-search-bar">
+                <div class="input-group stylish-input-group">
+                </div>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            <li class="navbar-item dropdown header-admin">
+                <a class="navbar-nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                   aria-expanded="false">
+                    <div class="admin-title">
+                        <h5 class="item-title">{{ request.user.get_full_name }}</h5>
+                        <span>{% if request.user.is_superuser or request.user.is_manager %}مدیر{% elif request.user.is_parent %}والدین{% elif request.user.is_teacher %}دبیر{% elif request.user.is_student %}دانش آموز{% endif %}</span>
+                    </div>
+                    <div class="admin-img">
+                        {% if request.user.profile_img %}
+                        <img src="{{ request.user.profile_img.url }}" alt="{{ request.user.national_code }}">
+                        {% else %}
+                        <img src="{% static 'img/user_image.png' %}" alt="{{ request.user.national_code }}"
+                             width="40px">
+                        {% endif %}
+                    </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <div class="item-header">
+                        <h6 class="item-title">{{ request.user.get_full_name }}</h6>
+                    </div>
+                    <div class="item-content" style="text-align: right;">
+                        <ul class="settings-list">
+                            <li><a href="{% if request.user.is_student %}{% url 'main:student_detail' request.user.pk %}{% elif request.user.is_parent %}{% url 'main:parent_detail' request.user.pk %}{% elif request.user.is_teacher %}{% url 'main:teacher_detail' request.user.pk %}{% endif %}"><i class="flaticon-user"></i>پروفایل من</a></li>
+                            <li><a href="{% url 'account:login' %}"><i class="flaticon-list"></i>داشبورد</a></li>
+                            <li><a href="{% url 'account:change_password' %}"><i class="flaticon-gear-loading"></i>تغییر گذرواژه</a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#logout_modal"><i
+                                    class="flaticon-turn-off"></i>خروج</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li class="navbar-item dropdown header-message">
+                <a class="navbar-nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                   aria-expanded="false">
+                    <i class="far fa-bell"></i>
+                    <div class="item-title d-md-none text-16 mg-l-10">اعلانات</div>
+                    <span>{% if count_notice_header %}{{ count_notice_header.count }}{% else %}0{% endif %}</span>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-right text-right">
+                    <div class="item-header">
+                        <h6 class="item-title">اعلانات</h6>
+                    </div>
+                    <div class="item-content">
+                        {% if notices_header %}
+                        {% for notice in notices_header %}
+                        <div class="media">
+                            <div class="media-body space-sm">
+                                <div class="item-title">
+                                    <a href="#">
+                                        <span class="item-name">{{ notice.writer.get_full_name }}</span>
+                                    </a>
+                                </div>
+                                <h5 style="margin-bottom: 0;margin-top: 12px;">{{ notice.title }}</h5>
+                                <p>{{ notice.description|truncatewords_html:7 }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        {% endfor %}
+                        <div class="events-btn text-center">
+                            <a href="{% url 'main:notices' %}">تمام اعلانات</a>
+                        </div>
+                        {% else %}
+                        <h5 class="text-center">اعلانی برای نمایش وجود ندارد</h5>
+                        {% endif %}
+                    </div>
+                </div>
+            </li>
+            <li class="navbar-item dropdown header-notification">
+                <a class="navbar-nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                   aria-expanded="false">
+                    <i class="far fa-calendar-alt"></i>
+                    <div class="item-title d-md-none text-16 mg-l-10">رویداد ها</div>
+                    <span>{% if event_count %}{{ event_count.count }}{% else %}0{% endif %}</span>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-right text-right">
+                    <div class="item-header">
+                        <h6 class="item-title">رویداد ها</h6>
+                    </div>
+                    <div class="item-content">
+                        {% if events %}
+                        {% for event in dropdown_events %}
+                        <div class="media">
+                            <div class="item-icon bg-orange">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="media-body space-sm">
+                                <a href="{% url 'main:events' %}">
+                                    <div class="post-title"><b>{{ event.title }}</b></div>
+                                </a>
+                                <span>{{ event.jstart }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <div class="events-btn text-center">
+                            <a href="{% url 'main:events' %}">تمام رویداد ها</a>
+                        </div>
+                        {% else %}
+                        <h5 class="text-red">رویدادی برای نمایش وجود ندارد</h5>
+                        {% endif %}
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="modal fade" id="logout_modal" tabindex="-1" role="dialog" aria-labelledby="logout_modal"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title"
+                                          id="logout_modalLabel">خروج از اکانت</h5>
+                <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body"><p>آیا میخواهید از اکانت خود خارج شوید؟</p></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary mx-1" data-dismiss="modal"
+                        aria-label="Close">لغو
+                </button>
+                <a href="{% url 'account:logout' %}" class="btn btn-danger">خروج</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header Menu Area End Here -->

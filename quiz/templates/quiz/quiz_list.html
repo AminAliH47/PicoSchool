@@ -1,0 +1,492 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+{% if request.resolver_match.url_name == "quiz_list" %}
+<div class="mt-5 m-3">
+    <div class="breadcrumbs-area">
+        <h3>لیست آزمون ها</h3>
+        {% if request.user.is_superuser or request.user.is_manager %}
+        <a href="{% url 'quiz:quiz_create' %}" class="btn">ساخت آزمون</a>
+        {% endif %}
+    </div>
+    <div class="card height-auto">
+        <div class="card-body user_list">
+            <div class="single-info-details">
+                <div class="item-content">
+                    <div class="content-inline item-content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-box-wrap">
+                                    <form class="search-form-box">
+                                        <div class="row gutters-8">
+                                            {% if request.user.is_superuser or request.user.is_manager %}
+                                            <div class="col-lg-3 col-12 form-group">
+                                                <span class="small mb-1">فیلتر بر اساس کلاس</span>
+                                                <div class="d-block">
+                                                    {{ filter.form.quiz_class }}
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <span class="small mb-1">جستجو بر اساس نام</span>
+                                                </div>
+                                                <div class="col-lg-5 col-6 form-group">
+                                                    {{ filter.form.name }}
+                                                </div>
+                                                <div class="col-lg-3 col-6 form-group">
+                                                    <button type="submit" class="btn search_btn">جستجو
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="table-responsive student-table-box">
+                                        <table class="table display data-table text-nowrap">
+                                            <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>نام آزمون</th>
+                                                <th>موضوع</th>
+                                                <th>تاریخ برگزاری</th>
+                                                <th>کلاس</th>
+                                                <th>کتاب</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for quiz in filter.qs %}
+                                            <tr class="filter">
+                                                <td>{{ quiz.id }}</td>
+                                                <td>
+                                                    {% if request.user.is_superuser or request.user.is_manager %}
+                                                    <a href="{% url 'quiz:quiz_detail' quiz.pk %}"><b>
+                                                        {{ quiz.name }}</b></a>
+                                                    {% elif request.user.is_student %}
+                                                    {% if request.user in quiz.students.all or quiz.active == False %}
+                                                    <a href="#"
+                                                       data-toggle="modal"
+                                                       data-target="#endQuiz">
+                                                        <b>{{ quiz.name }}</b>
+                                                    </a>
+                                                    {% else %}
+                                                    <a href="#" class="btn  start-quiz-btn btn-link"
+                                                       data-toggle="modal"
+                                                       data-target="#startQuizModal"
+                                                       data-pk="{{ quiz.pk }}"
+                                                       data-quiz="{{ quiz.name }}"
+                                                       data-difficulty="{{ quiz.difficulty }}"
+                                                       data-time="{{ quiz.time }}"
+                                                       data-uuid="{{ quiz.uuid }}">
+                                                        <b>{{ quiz.name }}</b>
+                                                    </a>
+                                                    {% endif %}
+                                                    {% endif %}
+                                                </td>
+
+                                                <td>{{ quiz.topic }}</td>
+                                                <td>{{ quiz.jdate }}</td>
+                                                <td>{{ quiz.quiz_class }}</td>
+                                                <td>{{ quiz.quiz_book }}</td>
+                                                {% if request.user.is_superuser or request.user.is_manager %}
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                                                           aria-expanded="false">
+                                                            <span class="flaticon-more-button-of-three-dots"></span>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <a class="dropdown-item"
+                                                               href="{% url 'quiz:quiz_update' quiz.pk %}"><i
+                                                                    class="fas fa-cogs text-dark-pastel-green"></i>ویرایش</a>
+                                                            <a class="dropdown-item"
+                                                               href="{% url 'quiz:quiz_list' %}"><i
+                                                                    class="fas fa-redo-alt text-orange-peel"></i>تازه
+                                                                کردن</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                {% elif request.user.is_student and quiz.active %}
+                                                {% if request.user not in quiz.students.all %}
+                                                <td>
+                                                    <button class="btn start-quiz-btn"
+                                                            data-toggle="modal"
+                                                            data-target="#startQuizModal"
+                                                            data-pk="{{ quiz.pk }}"
+                                                            data-quiz="{{ quiz.name }}"
+                                                            data-difficulty="{{ quiz.difficulty }}"
+                                                            data-time="{{ quiz.time }}"
+                                                            data-uuid="{{ quiz.uuid }}">شروع آزمون
+                                                    </button>
+                                                </td>
+                                                {% endif %}
+                                                {% endif %}
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td>
+                                                    <p class="font-weight-bold text-danger">آزمونی وجود ندارد</p>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="startQuizModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">شروع آزمون</h5>
+                <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="quiz-modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary mx-2" data-dismiss="modal">لغو</button>
+                <button type="button" class="btn btn-success mx-2" id="start-button">شروع</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="endQuiz" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">پایان آزمون</h5>
+                <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                این آزمون به پایان رسیده است
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary mx-2" data-dismiss="modal">برگشت</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% elif request.resolver_match.url_name == "quiz_questions_list" %}
+<div class="mt-5 m-3">
+    <div class="breadcrumbs-area">
+        <h3>لیست سوالات</h3>
+    </div>
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="single-info-details">
+                <div class="item-content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="accordion" id="accordionExample">
+                                {% for qus in questions %}
+                                <button class="btn delete-qus delete-question" data-id="{{ qus.id }}">
+                                    <i class="fas fa-trash "></i>
+                                </button>
+                                <a class="btn edit-qus edit-question" href="{% url 'quiz:question_update' qus.pk %}">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="mb-0 qus-title">
+                                            <a href="#" data-toggle="collapse" data-target=".question{{ qus.id }}">
+                                                {{ qus|safe }} {% if qus.question_type == "تشریحی" %}(تشریحی)
+                                                {% elif qus.question_type == "چهار گزینه ای" %}(چهار گزینه ای)
+                                                {% endif %}
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <ul class="list-group collapse question{{ qus.id }}">
+                                        {% for ans in qus.answer_multi_question.all %}
+                                        <li class="list-group-item {% if ans.correct %}background-green{% endif %}">
+                                            <h6>{{ ans }}</h6>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                {% empty %}
+                                سوالی یافت نشد
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <button data-pk="{{ quiz.pk }}"
+                                class="btn btn-primary add_question"
+                                data-toggle="collapse" data-target="#quizCollapse">
+                            <i class="fas fa-plus-circle"></i>
+                            افزودن سوال
+                        </button>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="collapse bg-light" id="quizCollapse">
+                            <div class="card-body my-4 add_question">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>نوع سوال <span class="text-red">*</span></p>
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                    id="QuestionTypeDP"
+                                                    data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                -------------
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <button class="dropdown-item qus_type">تشریحی</button>
+                                                <button class="dropdown-item qus_type">چهار گزینه ای</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <p>عنوان سوال <span class="text-red">*</span></p>
+                                        {{ form.media }}
+                                        {{ form.text }}
+                                    </div>
+                                    <div class="col-md-12" id="MultiQuestion" style="display: none;">
+                                        <hr>
+                                        <form method="post">
+                                            <input type="hidden" class="d-none" id="quiz_id"
+                                                   value="{{ request.resolver_match.kwargs.pk }}">
+                                            <table class="add_answer">
+                                                <thead>
+                                                <tr>
+                                                    <th>عنوان پاسخ</th>
+                                                    <th>پاسخ درست</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for x in answers %}
+                                                <tr>
+                                                    <td>
+                                                        <input type="text" class="Answer" id="{{ x }}">
+                                                    </td>
+                                                    <td>
+                                                        <input type="radio" class="CorrectAnswer"
+                                                               name="correctAnswer" value="{{ x }}">
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </form>
+                                    </div>
+                                    <div class="col-md-12 mt-3">
+                                        <button class="btn btn-success ml-0" id="make_qus"
+                                                style="display: none;">ساخت سوال
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <a href="{% url 'quiz:quiz_detail' request.resolver_match.kwargs.pk %}"
+                           class="btn btn-secondary">برگشت</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% elif request.resolver_match.url_name == "quiz_start" %}
+<div class="mt-5 m-3">
+    <div class="breadcrumbs-area">
+        <h3>آزمون {{ quiz.name }}</h3>
+    </div>
+    <div class="card height-auto">
+        <div class="card-body user_list">
+            <div class="row">
+                <div class="col-md-12 text-left">
+                    <input type="hidden" class="d-none" value="{{ quiz.time }}" id="time">
+                    <input type="hidden" class="d-none" value="{{ quiz.uuid }}" id="quiz_uuid">
+                    <input type="hidden" class="d-none" value="{{ quiz.pk }}" id="quiz_pk">
+                    <h3 class="quiz-timer" id="timer_box"></h3>
+                </div>
+                <div class="col-md-12">
+                    <div class="single-info-details">
+                        <div class="item-content">
+                            <div class="content-inline item-content">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {% for qus in questions %}
+                                        <input type="hidden" class="qus_id" value="{{ qus.id }}">
+                                        <div class="card-body mt-5">
+                                            <form method="post">{% csrf_token %}
+                                                <h3>{{ qus }}</h3>
+                                                {% if qus.question_type == "تشریحی" %}
+                                                {% for ans in qus.answer_desc_question.all %}
+                                                <textarea
+                                                        class="form-control w-100 {% if quiz.show_quiz == False %}text-answer{% endif %}"
+                                                        name="{{ qus.id }}" id="{{ ans.id }}"
+                                                        rows="10"
+                                                        {% if quiz.show_quiz == False %}
+                                                        data-type="{{ qus.question_type }}"
+                                                        {% endif %}></textarea>
+                                                {% endfor %}
+                                                {% elif qus.question_type == "چهار گزینه ای" %}
+                                                <div id="multiAns">
+                                                    {% for ans in qus.answer_multi_question.all %}
+
+                                                    <div class="d-block mt-2">
+                                                        <input type="radio" value="{{ ans.text }}"
+                                                               id="{{ qus.pk }}-{{ ans.pk }}" data-pk="{{ ans.pk }}"
+                                                               name="{{ qus.id }}" style="width: 18px; height: 18px;"
+                                                               class="{% if quiz.show_quiz == False %}multi-answer{% endif %} ans{{ qus.id }}"
+                                                               {% if quiz.show_quiz == False %}
+                                                               data-type="{{ qus.question_type }}"
+                                                               {% endif %}>
+                                                        <label for="{{ qus.pk }}-{{ ans.pk }}" class="h3">
+                                                            {{ ans.text }}</label>
+                                                    </div>
+                                                    {% endfor %}
+                                                </div>
+                                                {% endif %}
+                                                {% if quiz.show_quiz %}
+                                                <div class="pagination mt-5">
+                                                <span class="step-links">
+                                                    {% if questions.has_next %}
+                                                        <button type="button"
+                                                                class="btn btn-info text-light submit-answer"
+                                                                data-id="{{ qus.id }}"
+                                                                data-type="{{ qus.question_type }}"
+                                                                data-url="?qus={{ questions.next_page_number }}">ارسال</button>
+                                                    {% else %}
+                                                        <button type="button"
+                                                                class="btn btn-warning end-quiz"
+                                                                data-id="{{ qus.id }}"
+                                                                data-type="{{ qus.question_type }}"
+                                                                data-name="{{ qus.text }}"
+                                                                data-pk="{{ request.resolver_match.kwargs.pk }}"
+                                                                data-uuid="{{ request.resolver_match.kwargs.uuid }}">پایان</button>                                                    {% endif %}
+                                                </span>
+                                                </div>
+                                                {% endif %}
+                                            </form>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if quiz.show_quiz == False %}
+                    <button type="button"
+                            class="btn btn-warning mt-5 end-quiz-2"
+                            data-pk="{{ request.resolver_match.kwargs.pk }}"
+                            data-uuid="{{ request.resolver_match.kwargs.uuid }}">
+                        پایان
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% elif request.resolver_match.url_name == "result_list" %}
+<div class="mt-5 m-3">
+    <div class="breadcrumbs-area">
+        <h3>لیست نتایج</h3>
+    </div>
+    <div class="card height-auto">
+        <div class="card-body user_list">
+            <div class="single-info-details">
+                <div class="item-content">
+                    <div class="content-inline item-content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-box-wrap">
+                                    <form class="search-form-box">
+                                        <div class="row gutters-8">
+                                            {% if request.user.is_superuser or request.user.is_manager or request.user.is_teacher %}
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <span class="small mb-1">جستجو نام دانش آموز</span>
+                                                </div>
+                                                <div class="col-lg-5 col-6 form-group">
+                                                    {{ filter.form.full_name }}
+                                                </div>
+                                                <div class="col-lg-3 col-6 form-group">
+                                                    <button type="submit" class="btn search_btn">جستجو
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </form>
+                                    <div class="table-responsive student-table-box">
+                                        <table class="table display data-table text-nowrap">
+                                            <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>دانش آموز</th>
+                                                <th>نام آزمون</th>
+                                                <th>کلاس</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for result in filter.qs %}
+                                            <tr class="filter">
+                                                <td>{{ result.id }}</td>
+                                                <td>
+                                                    <a href="{% url 'quiz:result_detail' result.pk result.user.pk %}"><b>
+                                                        {{ result.user }}</b></a>
+                                                </td>
+
+                                                <td><a href="{% url 'quiz:result_detail' result.pk result.user.pk %}">
+                                                    {{ result.quiz.name }}</a></td>
+                                                <td>{{ result.quiz.quiz_class }}</td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                                                           aria-expanded="false">
+                                                            <span class="flaticon-more-button-of-three-dots"></span>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <a class="dropdown-item"
+                                                               href="{% url 'quiz:result_detail' result.pk result.user.pk %}"><i
+                                                                    class="fas fa-cogs text-dark-pastel-green"></i>جزئیات</a>
+                                                            <a class="dropdown-item"
+                                                               href="{% url 'quiz:quiz_list' %}"><i
+                                                                    class="fas fa-redo-alt text-orange-peel"></i>تازه
+                                                                کردن</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td><p class="font-weight-bold text-danger">نتیجه ای وجود ندارد</p></td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock main %}
+
+{% block js_files %}
+<script src='{% static "quiz/quiz.js" %}'></script>
+{% endblock js_files %}

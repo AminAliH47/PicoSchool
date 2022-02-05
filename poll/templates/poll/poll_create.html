@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="m-2">
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        {% if request.resolver_match.url_name == "poll_create" %}
+        <h3>اضافه کردن نظرسنجی جدید</h3>
+        {% elif request.resolver_match.url_name == "poll_update" %}
+        <h3>ویرایش نظرسنجی</h3>
+        {% endif %}
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <input type="hidden" class="d-none" value="{{ request.resolver_match.url_name }}" id="url_name">
+    <!-- Add New Teacher Area Start Here -->
+    <div class="card height-auto">
+        <div class="card-body">
+            <form class="new-added-form" method="post" autocomplete="off">{% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-8 col-12 form-group">
+                        <label> عنوان سوال نظرسنجی <span>*</span></label>
+                        {{ form.question }}
+                        {% for error in form.question.errors %}
+                        <p class="text-danger m-2">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-2 col-12 form-group">
+                        <label> نمایش به : <span>*</span></label>
+                        {{ form.for_user }}
+                        {% for error in form.for_user.errors %}
+                        <p class="text-danger m-2">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% if request.resolver_match.url_name == "poll_update" %}
+                    <div class="col-lg-2 col-12 form-group">
+                        <label> فعال / غیرفعال <span>*</span></label>
+                        <label class="switch">
+                            {{ form.active }}
+                            <span class="slider round"></span>
+                        </label>
+                        {% for error in form.active.errors %}
+                        <p class="text-danger m-2">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-12">
+                        <hr>
+                    </div>
+                    <div class="col-md-12">
+                        <a href="{% url 'poll:poll_options_list' quiz.pk %}" class="btn btn-info w-100">لیست گزینه های نظرسنجی</a>
+                    </div>
+                    <div class="col-md-12">
+                        <hr>
+                    </div>
+                    {% endif %}
+                    <div class="col-12 form-group mg-t-8">
+                        <button type="submit" class="btn-fill-lg submit-form-btn">ذخیره</button>
+                        <a href="{% url 'poll:poll_list' %}" class="btn-fill-lg reset-form-btn">برگشت</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
