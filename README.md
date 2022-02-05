@@ -1,12 +1,12 @@
-<div style="width: 100%; text-align: center;">
+<p align="center">
   
-  <img src="https://s20.picofile.com/file/8447413126/picoschool.png" width="40%" style="margin: auto; text-align: center;">
+  <img src="https://s20.picofile.com/file/8447413126/picoschool.png" alt="PicoSchool" width="40%">
 
-  <p style="margin-top: 10px;margin: auto; text-align: center;">
+  <i style="margin-top: 10px;">
   Advanced school management system written in Django :)
-  </p>
+  </i>
   <hr style="border: 1px solid #00ff00ff;">
-</div>
+</p>
 
 <br>
 <h3 style="margin: 30px 0 -5px 0;">
