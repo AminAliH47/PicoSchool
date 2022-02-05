@@ -4,6 +4,8 @@ from django.db.models import Count
 from manager.models import Grade, Major
 from main.validators import is_valid_national_code
 
+from account.utils.validators import validate_phone_number
+
 
 class User(AbstractUser):
     SINGLE_OR_MARRIED = (
@@ -51,6 +53,7 @@ class User(AbstractUser):
         max_length=11,
         null=True,
         blank=True,
+        validators=[validate_phone_number],
         verbose_name='شماره تلفن',
     )
     father_name = models.CharField(
