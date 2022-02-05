@@ -12,7 +12,7 @@
 </p>
 
 <h3 style="margin: 30px 0 -5px 0;">
-⚙️ Run the project
+⚙️ Config the project
 </h3>
 
 <p>
@@ -45,3 +45,8 @@ After activating venv you should install the <b>requirements.txt</b> packages. S
 <pre>
 pip install -r requirements.txt
 </pre>
+
+
+<p align="center">
+Licensed by <b>Coilaco</b>
+</p>
