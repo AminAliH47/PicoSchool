@@ -127,7 +127,7 @@ password: Admin12345
 </ul>
 
 <h4>
-Main admin panel path:
+🔒 Main admin panel path:
 </h4>
 <pre>
 http://127.0.0.1:8002/pico-school/
