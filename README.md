@@ -98,12 +98,32 @@ You can login to PicoSchool with different roles, the usernames and passwords of
 <ul>
   <li>
     Manager role:
-    <pre>
-    username: Admin
-    password: Admin12345
-    </pre>
+<pre>
+username: Admin
+password: Admin12345
+</pre>
   </li>
-  
+  <li>
+    Teacher role:
+<pre>
+username: 0934567899
+password: Admin12345
+</pre>
+  </li>
+  <li>
+    Student role:
+<pre>
+username: 0923456789
+password: Admin12345
+</pre>
+  </li>
+  <li>
+    Parent role:
+<pre>
+username: 0934567898
+password: Admin12345
+</pre>
+  </li>
 </ul>
 
 <h6 align="center" style="font-weight: 200;">
