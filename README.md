@@ -14,7 +14,6 @@
 <h3 style="margin: 30px 0 -5px 0;">
 ⚙️ Run the project
 </h3>
-<hr>
 
 <p>
 First you should make venv for this project.
