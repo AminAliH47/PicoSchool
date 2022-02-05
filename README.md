@@ -133,9 +133,9 @@ password: Admin12345
 http://127.0.0.1:8002/pico-school/
 </pre>
 
-<h5>
+<h4>
 Now you can use all the features of PicoSchool.
-</h5>
+</h4>
 
 <p>
 To make full and practical use of PicoSchool, we are preparing a simple tutorial that you can see in the same repository wiki.
@@ -144,6 +144,7 @@ To make full and practical use of PicoSchool, we are preparing a simple tutorial
 </b>
 </p>
 
+<br>
 <h6 align="center" style="font-weight: 200;">
   Licensed by <b>Coilaco</b>
 </h6>
