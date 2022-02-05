@@ -1,5 +1,5 @@
 <img src="https://s20.picofile.com/file/8447413126/picoschool.png" width="25%">
-<hr>
+<hr style="border: 1px solid #00ff00ff;">
 <p style="margin-top: 10px;">
 Advanced school management system written in Django :)
 </p>
