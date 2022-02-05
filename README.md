@@ -47,8 +47,6 @@ pip install -r requirements.txt
 </pre>
 
 
-<p align="center">
-  <h6>
-    Licensed by <b>Coilaco</b>
-  </h6>
-</p>
+<h6 align="center" style="font-weight: 200;">
+  Licensed by <b>Coilaco</b>
+</h6>
