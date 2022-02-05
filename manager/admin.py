@@ -29,12 +29,17 @@ admin.site.register(ExternalEventCalendar, ExternalEventCalendarAdmin)
 
 admin.site.register(NoticeBox)
 
-admin.site.register(Books)
+
+class BooksAdmin(admin.ModelAdmin):
+    search_fields = ('books_class',)
+
+
+admin.site.register(Books, BooksAdmin)
 
 
 class ClassesAdmin(admin.ModelAdmin):
-    search_fields = ('name', 'teacher')
-    autocomplete_fields = ('teacher',)
+    search_fields = ('name', 'teacher', 'books',)
+    autocomplete_fields = ('teacher', 'books',)
 
 
 admin.site.register(Classes, ClassesAdmin)

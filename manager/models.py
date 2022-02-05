@@ -221,7 +221,6 @@ class Classes(models.Model):
     )
     books = models.ManyToManyField(
         to="manager.Books",
-        blank=True,
         related_name="books_class",
         verbose_name="کتاب های کلاس",
     )
