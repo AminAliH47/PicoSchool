@@ -112,7 +112,7 @@ password: Admin12345
   </li>
   <li>
     Student role:
-```bash
+```python
 username: 0923456789
 password: Admin12345
 ```
