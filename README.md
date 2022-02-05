@@ -45,12 +45,12 @@ After activating venv you should install the <b>requirements.txt</b> packages. S
 <pre>
 pip install -r requirements.txt
 </pre>
-
-<hr>
-
 <h5>
 Configuration of project almost done.
 </h5>
+
+<hr>
+
 <h3 style="margin: 30px 0 -5px 0;">
 🏁 Run the project
 </h3>
@@ -133,6 +133,7 @@ password: Admin12345
 http://127.0.0.1:8002/pico-school/
 </pre>
 
+<hr>
 <h4>
 ⭐️ Now you can use all the features of PicoSchool.
 </h4>
