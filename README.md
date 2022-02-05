@@ -112,10 +112,10 @@ password: Admin12345
   </li>
   <li>
     Student role:
-```python
+<pre>
 username: 0923456789
 password: Admin12345
-```
+</pre>
   </li>
   <li>
     Parent role:
@@ -126,11 +126,11 @@ password: Admin12345
   </li>
 </ul>
 
-<h5>
+<h4>
 Main admin panel path:
-</h5>
+</h4>
 <pre>
-
+http://127.0.0.1:8002/pico-school/
 </pre>
 
 
