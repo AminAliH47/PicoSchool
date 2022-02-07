@@ -26,7 +26,14 @@ def login_view(request):
 
         if user is not None:
             auth.login(request, user)
-            return redirect('/')
+            if user.is_manager:
+                return redirect(reverse_lazy('manager:manager_panel'))
+            elif user.is_teacher:
+                return redirect(reverse_lazy('teacher:teacher_panel'))
+            elif user.is_student:
+                return redirect(reverse_lazy('student:student_panel'))
+            elif user.is_parent:
+                return redirect(reverse_lazy('parent:parent_panel'))
         else:
             messages.error(request, 'نام کاربری یا گذرواژه وارد شده نادرست است')
     context = {
