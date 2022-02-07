@@ -1,6 +1,6 @@
 <p align="center">
   
-  <img src="https://s20.picofile.com/file/8447413126/picoschool.png" alt="PicoSchool" width="40%">
+  <img src="https://drive.google.com/uc?id=1Lp6hXe_C-_f0uCYBmsPQ2T1y4BY0n32L&export=download" alt="PicoSchool" width="40%">
   
   <p align="center">
     <i style="margin-top: 10px; display: block;">
