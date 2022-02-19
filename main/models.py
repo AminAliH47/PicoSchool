@@ -14,7 +14,7 @@ class SiteSetting(models.Model):
 
     # Fields
     school_name = models.CharField(
-        max_length=150,
+        max_length=20,
         verbose_name="نام مدرسه",
     )
     school_logo = models.ImageField(
@@ -28,7 +28,7 @@ class SiteSetting(models.Model):
         verbose_name="رنگ سایت",
     )
     site_menu_theme = models.CharField(
-        max_length=30,
+        max_length=15,
         choices=MENU_THEME,
         default="waterfall",
         verbose_name="تم منو سایت",
