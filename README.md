@@ -3,15 +3,15 @@
   <img src="https://drive.google.com/uc?id=1Lp6hXe_C-_f0uCYBmsPQ2T1y4BY0n32L&export=download" alt="PicoSchool" width="40%">
   
   <p align="center">
-    <i style="margin-top: 10px; display: block;">
+    <i>
     Advanced school management system written in Django :)
     </i>
   </p>
   
-  <hr style="border: 1px solid #00ff00ff;">
+  <hr>
 </p>
 
-<h3 style="margin: 30px 0 -5px 0;">
+<h3>
 ⚙️ Config the project
 </h3>
 
@@ -51,7 +51,7 @@ Configuration of project almost done.
 
 <hr>
 
-<h3 style="margin: 30px 0 -5px 0;">
+<h3>
 🏁 Run the project
 </h3>
 <p>
@@ -85,7 +85,7 @@ http://127.0.0.1:8002/
 </pre>
 
 <hr>
-<h3 style="margin: 30px 0 -5px 0;">
+<h3>
 ✅ Use the project
 </h3>
 <h5>
@@ -146,6 +146,6 @@ To make full and practical use of PicoSchool, we are preparing a simple tutorial
 </p>
 
 <br>
-<h6 align="center" style="font-weight: 200;">
+<h6 align="center">
   Licensed by <b>Coilaco</b>
 </h6>
