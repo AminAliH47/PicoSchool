@@ -4,7 +4,10 @@ from django.utils import timezone
 from django.utils.html import format_html
 from account.models import User
 from extensions.utils import jalili_converter
-from manager.models import Classes, Books
+from manager.models import (
+    Classes,
+    Books,
+)
 import uuid
 
 
@@ -20,16 +23,15 @@ class Quiz(models.Model):
 
     # Fields
     uuid = models.UUIDField(
-        max_length=120,
         default=uuid.uuid4,
         verbose_name='آیدی یونیک'
     )
     name = models.CharField(
-        max_length=120,
+        max_length=30,
         verbose_name='نام آزمون'
     )
     topic = models.CharField(
-        max_length=120,
+        max_length=30,
         null=True,
         blank=True,
         verbose_name='موضوع آزمون'
@@ -67,7 +69,7 @@ class Quiz(models.Model):
     )
     difficulty = models.CharField(
         choices=DIFF_CHOICES,
-        max_length=10,
+        max_length=5,
         verbose_name='سختی آزمون'
     )
     active = models.BooleanField(
@@ -104,6 +106,9 @@ class Quiz(models.Model):
         return self.question_quiz.all()
 
     def jdate(self):
+        """
+        Convert Gregorian date to Jalali
+        """
         return jalili_converter(self.created)
 
 
@@ -122,7 +127,7 @@ class QuizQuestion(models.Model):
         primary_key=True,
     )
     text = RichTextUploadingField(
-        max_length=120,
+        max_length=50,
         verbose_name='عنوان سوال',
     )
     quiz = models.ForeignKey(
@@ -133,7 +138,7 @@ class QuizQuestion(models.Model):
     )
     question_type = models.CharField(
         choices=QUS_TYPE,
-        max_length=20,
+        max_length=15,
         default='چهار گزینه ای',
         verbose_name='نوع سوال'
     )
@@ -162,7 +167,7 @@ class QuizMultipleAnswers(models.Model):
 
     # Fields
     text = models.CharField(
-        max_length=120,
+        max_length=30,
         verbose_name='عنوان پاسخ',
     )
     correct = models.BooleanField(
@@ -192,7 +197,7 @@ class QuizMultipleAnswers(models.Model):
 
 class QuizDescAnswers(models.Model):
     """
-    Model for Answer description questions
+    Model for description Answer questions
     """
 
     # Fields
