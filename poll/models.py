@@ -17,7 +17,7 @@ class Poll(models.Model):
         ('student', 'دانش آموزان'),
     )
     question = models.CharField(
-        max_length=120,
+        max_length=30,
         verbose_name='عنوان سوال',
     )
     active = models.BooleanField(
@@ -25,7 +25,7 @@ class Poll(models.Model):
         verbose_name='فعال / غیرفعال',
     )
     for_user = models.CharField(
-        max_length=20,
+        max_length=15,
         choices=USER,
         default='all',
         verbose_name='برای کاربران',
@@ -51,12 +51,10 @@ class Poll(models.Model):
     def __str__(self):
         return self.question
 
+    @property
     def all_count(self):
-        reviews = Poll.objects.all().aggregate(count=Count('id'))
-        count = 0
-        if reviews["count"] is not None:
-            count = int(reviews["count"])
-        return count
+        polls = Poll.objects.all().count()
+        return polls
 
 
 class PollOptions(models.Model):
@@ -72,7 +70,7 @@ class PollOptions(models.Model):
         verbose_name='برای نظرسنجی',
     )
     option = models.CharField(
-        max_length=120,
+        max_length=30,
         verbose_name='گزینه',
     )
     option_count = models.IntegerField(
