@@ -57,7 +57,7 @@ class User(AbstractUser):
         verbose_name='شماره تلفن',
     )
     father_name = models.CharField(
-        max_length=120,
+        max_length=30,
         null=True,
         blank=True,
         verbose_name="نام پدر",
@@ -100,7 +100,7 @@ class User(AbstractUser):
         verbose_name="والدین دانش آموز",
     )
     date_of_birth = models.CharField(
-        max_length=200,
+        max_length=10,
         verbose_name="تاریخ تولد",
     )
     # -- Parent Section
@@ -111,13 +111,13 @@ class User(AbstractUser):
         verbose_name='تلفن منزل',
     )
     job = models.CharField(
-        max_length=120,
+        max_length=30,
         null=True,
         blank=True,
         verbose_name="شغل",
     )
     education = models.CharField(
-        max_length=120,
+        max_length=30,
         null=True,
         blank=True,
         verbose_name="تحصیلات",
@@ -135,13 +135,13 @@ class User(AbstractUser):
     )
     # -- Teachers Section
     certificate_code = models.CharField(
-        max_length=20,
+        max_length=10,
         null=True,
         blank=True,
         verbose_name="کد شناسنامه",
     )
     university = models.CharField(
-        max_length=120,
+        max_length=20,
         null=True,
         blank=True,
         verbose_name="دانشگاه محل تحصیل",
@@ -158,7 +158,7 @@ class User(AbstractUser):
     )
     single_or_married = models.CharField(
         choices=SINGLE_OR_MARRIED,
-        max_length=120,
+        max_length=5,
         null=True,
         blank=True,
         verbose_name="مجرد یا متاهل",
@@ -169,7 +169,7 @@ class User(AbstractUser):
         verbose_name="تعداد فرزند",
     )
     spouse_fullname = models.CharField(
-        max_length=150,
+        max_length=50,
         null=True,
         blank=True,
         verbose_name="نام و نام خانوادگی همسر",
@@ -182,7 +182,7 @@ class User(AbstractUser):
     )
     status = models.CharField(
         choices=STATUS,
-        max_length=120,
+        max_length=20,
         null=True,
         blank=True,
         verbose_name="وضعیت",
@@ -196,23 +196,17 @@ class User(AbstractUser):
     def __str__(self):
         return self.get_full_name()
 
+    @property
     def parent_count(self):
-        reviews = User.objects.filter(is_parent=True, is_active=True).aggregate(count=Count('id'))
-        count = 0
-        if reviews["count"] is not None:
-            count = int(reviews["count"])
-        return count
+        parents = User.objects.filter(is_parent=True, is_active=True).count()
+        return parents
 
+    @property
     def teacher_count(self):
-        reviews = User.objects.filter(is_teacher=True, is_active=True).aggregate(count=Count('id'))
-        count = 0
-        if reviews["count"] is not None:
-            count = int(reviews["count"])
-        return count
+        teachers = User.objects.filter(is_teacher=True, is_active=True).count()
+        return teachers
 
+    @property
     def student_count(self):
-        reviews = User.objects.filter(is_student=True, is_active=True).aggregate(count=Count('id'))
-        count = 0
-        if reviews["count"] is not None:
-            count = int(reviews["count"])
-        return count
+        students = User.objects.filter(is_student=True, is_active=True).count()
+        return students
