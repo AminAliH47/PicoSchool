@@ -15,17 +15,17 @@ class EventCalendar(models.Model):
     """
 
     # Fields
-    id = models.CharField(
-        max_length=100,
+    id = models.IntegerField(
         unique=True,
         primary_key=True,
         verbose_name="آیدی رویدار",
     )
     title = models.CharField(
-        max_length=120,
+        max_length=10,
         verbose_name="عنوان رویداد",
     )
     description = models.TextField(
+        max_length=100,
         null=True,
         blank=True,
         verbose_name='توضیحات رویداد',
@@ -40,11 +40,11 @@ class EventCalendar(models.Model):
         verbose_name="پایان رویداد",
     )
     backgroundColor = models.CharField(
-        max_length=20,
+        max_length=15,
         verbose_name="رنگ زمینه رویداد",
     )
     borderColor = models.CharField(
-        max_length=20,
+        max_length=15,
         verbose_name="رنگ خط رویداد",
     )
     publish = models.DateTimeField(
@@ -62,16 +62,18 @@ class EventCalendar(models.Model):
         return self.title
 
     def jstart(self):
+        """
+        Jalali date for event start field.
+        we get start date with custom Gregorian date and then change that to Jalali date
+        """
         start = self.start[:10]
         date_time_obj = datetime.strptime(start, '%Y-%m-%d')
         return change_month(jdatetime.date.fromgregorian(date=datetime.date(date_time_obj)))
 
+    @property
     def count(self):
-        reviews = EventCalendar.objects.all().aggregate(count=Count('id'))
-        count = 0
-        if reviews["count"] is not None:
-            count = int(reviews["count"])
-        return count
+        events = EventCalendar.objects.all().count()
+        return events
 
 
 class ExternalEventCalendar(models.Model):
@@ -80,22 +82,21 @@ class ExternalEventCalendar(models.Model):
     """
 
     # Fields
-    id = models.CharField(
-        max_length=100,
+    id = models.IntegerField(
         unique=True,
         primary_key=True,
         verbose_name="آیدی رویدار",
     )
     title = models.CharField(
-        max_length=120,
+        max_length=10,
         verbose_name="عنوان رویداد",
     )
     backgroundColor = models.CharField(
-        max_length=20,
+        max_length=15,
         verbose_name="رنگ زمینه رویداد",
     )
     borderColor = models.CharField(
-        max_length=20,
+        max_length=15,
         verbose_name="رنگ خط رویداد",
     )
     publish = models.DateTimeField(
@@ -126,11 +127,11 @@ class NoticeBox(models.Model):
         verbose_name="نویسنده اعلان",
     )
     title = models.CharField(
-        max_length=120,
+        max_length=20,
         verbose_name="عنوان اعلان",
     )
     description = models.TextField(
-        max_length=350,
+        max_length=300,
         verbose_name="متن اعلان",
     )
     publish = models.DateTimeField(
@@ -148,14 +149,15 @@ class NoticeBox(models.Model):
         return self.title
 
     def jpublish(self):
+        """
+        Convert Gregorian date to Jalali
+        """
         return jalili_converter(self.publish)
 
+    @property
     def count(self):
-        reviews = NoticeBox.objects.all().aggregate(count=Count('id'))
-        count = 0
-        if reviews["count"] is not None:
-            count = int(reviews["count"])
-        return count
+        notices = NoticeBox.objects.all().count()
+        return notices
 
 
 # Grade Section
@@ -166,7 +168,7 @@ class Grade(models.Model):
 
     # Fields
     name = models.CharField(
-        max_length=120,
+        max_length=10,
         verbose_name="نام مقطع",
     )
 
@@ -188,7 +190,7 @@ class Major(models.Model):
 
     # Fields
     name = models.CharField(
-        max_length=120,
+        max_length=10,
         verbose_name="نام رشته تحصیلی",
     )
 
@@ -210,7 +212,7 @@ class Classes(models.Model):
 
     # Fields
     name = models.CharField(
-        max_length=120,
+        max_length=15,
         verbose_name="نام کلاس",
     )
     code = models.CharField(
@@ -256,12 +258,12 @@ class Classes(models.Model):
     def __str__(self):
         return self.name
 
+    @property
     def student_count(self):
-        print(Classes.objects.filter(student_class="1"))
-        reviews = Classes.objects.filter(student_class__id=self.id).aggregate(count=Count('student_class'))
+        students = Classes.objects.filter(student_class__id=self.id).aggregate(count=Count('student_class'))
         count = 0
-        if reviews["count"] is not None:
-            count = int(reviews["count"])
+        if students["count"] is not None:
+            count = int(students["count"])
         return count
 
 
@@ -272,7 +274,7 @@ class Books(models.Model):
 
     # Fields
     name = models.CharField(
-        max_length=150,
+        max_length=50,
         verbose_name="نام کتاب درسی",
     )
     units = models.IntegerField(
@@ -310,9 +312,6 @@ class Books(models.Model):
         return self.name
 
 
-jalali_date = str(jdatetime.date.fromgregorian(date=timezone.now()))
-
-
 class Attendance(models.Model):
     """
     Model for students attendance
@@ -333,8 +332,8 @@ class Attendance(models.Model):
         verbose_name="کتاب",
     )
     date = models.CharField(
-        max_length=120,
-        default=jalali_date,
+        max_length=50,
+        default=str(jdatetime.date.fromgregorian(date=timezone.now())),
         verbose_name="تاریخ کلاس",
     )
     create = models.DateTimeField(
@@ -360,6 +359,9 @@ class Attendance(models.Model):
         return f"{self.attendance_class.name} - {self.jdate()}"
 
     def jdate(self):
+        """
+        Convert Gregorian date to Jalali
+        """
         return change_month(self.date)
 
     jdate.short_description = 'تاریخ کلاس'
@@ -392,7 +394,7 @@ class Assign(models.Model):
     )
     attendance_status = models.CharField(
         choices=ATTENDANCE_STATUS,
-        max_length=120,
+        max_length=15,
         null=True,
         blank=True,
         verbose_name="وضعیت حضور و غیاب",
@@ -450,10 +452,11 @@ class HomeWork(models.Model):
         verbose_name='برای کلاس',
     )
     title = models.CharField(
-        max_length=120,
+        max_length=20,
         verbose_name='عنوان',
     )
     description = models.TextField(
+        max_length=120,
         verbose_name='شرح تکلیف',
         blank=True,
     )
@@ -497,11 +500,11 @@ class EmploymentForm(models.Model):
         verbose_name='دانش آموز',
     )
     organ = models.CharField(
-        max_length=120,
+        max_length=25,
         verbose_name='ارگان مورد نظر',
     )
     status = models.CharField(
-        max_length=120,
+        max_length=15,
         choices=FORM_STATUS,
         default='در انتظار بررسی',
         verbose_name='وضعیت',
@@ -527,9 +530,7 @@ class EmploymentForm(models.Model):
     def __str__(self):
         return self.student.get_full_name()
 
+    @property
     def all_count(self):
-        reviews = EmploymentForm.objects.all().aggregate(count=Count('id'))
-        count = 0
-        if reviews["count"] is not None:
-            count = int(reviews["count"])
-        return count
+        forms = EmploymentForm.objects.all().count()
+        return forms
