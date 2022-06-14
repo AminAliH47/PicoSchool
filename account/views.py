@@ -16,11 +16,11 @@ from account.models import User
 @is_login()
 def login_view(request):
     if request.method == 'POST':
-        user_input = request.POST['username']
+        user_input = request.POST['username'].lower()
         try:
             username = User.objects.get(national_code=user_input).username
         except User.DoesNotExist:
-            username = request.POST['username']
+            username = request.POST['username'].lower()
         password = request.POST['password']
         user = auth.authenticate(username=username, password=password)
 
