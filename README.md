@@ -95,33 +95,33 @@ http://127.0.0.1:8002/
   حالا شما باید در PicoSchool لاگین کنید.
 </h5>
 <p>
-In default Database, we have some sample user in custom Roles. <br>
-You can login to PicoSchool with different roles, the usernames and passwords of these sample users in the default database are listed below:
+  در پایگاه داده (Database) پیشفرض، ما چند کاربر نمونه در نقش های مختلف داریم. <br>
+  شما می‌تونید با نقش های مختلف در PicoSchool لاگین کنید، نام کاربری و گذرواژه این کاربران نمونه در پایگاه داده پیشفرض در زیر فهرست شدند:  
 </p>
 <ul>
   <li>
-    Manager role:
+    نقش Manager (مدیر):
 <pre>
 username: Admin
 password: Admin12345
 </pre>
   </li>
   <li>
-    Teacher role:
+   نقش Teacher (دبیر):
 <pre>
 username: 0934567899
 password: Admin12345
 </pre>
   </li>
   <li>
-    Student role:
+    نقش Student (دانش آموز):
 <pre>
 username: 0923456789
 password: Admin12345
 </pre>
   </li>
   <li>
-    Parent role:
+   نقش Parent (والدین):
 <pre>
 username: 0934567898
 password: Admin12345
@@ -130,7 +130,7 @@ password: Admin12345
 </ul>
 
 <h4>
-🔒 Main admin panel path:
+🔒 مسیر ادمین پنل اصلی:
 </h4>
 <pre>
 http://127.0.0.1:8002/pico-school/
@@ -138,13 +138,13 @@ http://127.0.0.1:8002/pico-school/
 
 <hr>
 <h4>
-⭐️ Now you can use all the features of PicoSchool.
+  ⭐️ حالا شما می‌تونید از تمام قابلیت های PicoSchool استفاده کنید.
 </h4>
 
 <p>
-To make full and practical use of PicoSchool, we are preparing a simple tutorial that you can see in the same repository wiki.
+برای استفاده کامل و کاربردی از PicoSchool، در حال آماده سازی یک آموزش ساده هستیم که می توانید در ویکی (wiki) همین ریپازیتوری (repository) مشاهده کنید.
 <b>
-  <a href="https://github.com/AminAliH47/PicoSchool/wiki">PicoSchool Wiki</a>  
+  <a href="https://github.com/AminAliH47/PicoSchool/wiki">ویکی PicoSchool</a>  
 </b>
 </p>
 
