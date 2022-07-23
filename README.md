@@ -18,69 +18,70 @@
 </h3>
 
 <p>
-اول از همه نیاز هست که شما یک venv برای پروژه درست کنید.
+اول از همه نیاز هست که شما یک venv برای پروژه درست کنید. <br>
 پس در روت (root) اصلی پروژه باید این دستور را در ترمینال یا کنسول خود تایپ کنید: 
 </p>
 <pre>
 python -m venv venv
 </pre>
 <p>
-حالا باید venv خودتون رو فعال کنید.
-So in the main root of project you should type this command in your Terminal or Console: 
+حالا باید venv خودتون رو فعال کنید. <br>
+پس در روت (root) اصلی پروژه باید این دستور را در ترمینال یا کنسول خود تایپ کنید: 
 </p>
 <b>
-In Linux/macOS:
+در Linux/macOS:
 </b>
 <pre>
 source venv/bin/activate
 </pre>
 <b>
-In Windows:
+در Windows:
 </b>
 <pre>
 venv/Scripts/activate.ps1
 </pre>
 
 <p>
-After activating venv you should install the <b>requirements.txt</b> packages. So type this command in your Terminal or Console: 
+  بعد از فعالسازی venv شما باید پکیج های <b> requirements.txt </b> را نصب کنید. <br> 
+پس در روت (root) اصلی پروژه باید این دستور را در ترمینال یا کنسول خود تایپ کنید: 
 </p>
 <pre>
 pip install -r requirements.txt
 </pre>
 <h5>
-Configuration of project almost done.
+پیکربندی پروژه تقریبا تمام است.
 </h5>
 
 <hr>
 
 <h3>
-🏁 Run the project
+🏁 اجرای پروژه
 </h3>
 <p>
-First of all, please enter the following command in the Terminal or Console to make sure the project is configured correctly:
+  اول از همه، لطفا دستور زیر را در ترمینال یا کنسول خود وارد کنید تا مطمئن بشید پروژه به درستی پیکربندی شده است:
 </p>
 <pre>
 python manage.py check
 </pre>
 <p>
-You should see This message:
+  باید با چنین پیغامی مواجه بشید:
   <strong>
     <i>
       "System check identified no issues (0 silenced)."
     </i>
   </strong>
   <br>
-  If you see this message you can run project. So type this command in Terminal or Console:
+  اگر این پیغام را مشاهده می‌کنید، می‌توانید پروژه را اجرا کنید. برای اجرای پروژه این دستور را در ترمینال یا کنسول وارد کنید:
 </p>
 <pre>
 python manage.py runserver 8002
 </pre>
 <h4>
-Congratulations, you ran the project correctly ✅
+  تبریک، شما پروژه رو به درستی اجرا کردید ✅ 
 </h4>
 
 <p>
-Now copy/paste this address in your browser URL bar:
+  حالا این آدرس رو در نوار URL مرورگر خود وارد کنید:
 </p>
 <pre>
 http://127.0.0.1:8002/
@@ -88,10 +89,10 @@ http://127.0.0.1:8002/
 
 <hr>
 <h3>
-✅ Use the project
+✅ استفاده از پروژه
 </h3>
 <h5>
-Now you should Login into the PicoSchool. 
+  حالا شما باید در PicoSchool لاگین کنید.
 </h5>
 <p>
 In default Database, we have some sample user in custom Roles. <br>
