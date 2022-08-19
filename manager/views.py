@@ -433,16 +433,6 @@ def password_change(request, pk):
     return render(request, "manager/persons/change_password.html", context)
 
 
-# # Attendance Section
-# class AttendanceList(generic.ListView):
-#     queryset = Attendance.objects.all()
-#     template_name = ""
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['page_title'] = "حذف والد"
-#         return context
-
-
 @require_POST
 @allow_user(['is_superuser', 'is_manager', 'is_teacher'])
 def change_att_status(request):
@@ -461,7 +451,7 @@ def change_att_status(request):
 
 @require_POST
 @allow_user(['is_superuser', 'is_manager', 'is_teacher'])
-def add_att_status(request):  # add attendance status
+def add_att_status(request):  # add attendance status for student
     input_value = {
         'att_id': request.POST.get('att_id'),
         'stu_id': request.POST.get('stu_id'),
@@ -469,37 +459,43 @@ def add_att_status(request):  # add attendance status
     }
 
     print(input_value)
-    ass = Assign(attendance=Attendance.objects.get(id=input_value['att_id']),
-                 attendance_status=input_value['status'], student=User.objects.get(id=input_value['stu_id']))
-    ass.save()
+    assign_obj = Assign(
+        attendance=Attendance.objects.get(id=input_value['att_id']),
+        attendance_status=input_value['status'],
+        student=User.objects.get(id=input_value['stu_id'])
+    )
+    assign_obj.save()
     return HttpResponse(input_value)
 
 
 @require_POST
 @allow_user(['is_superuser', 'is_manager', 'is_teacher'])
-def change_att_note(request):  # add attendance status
+def change_att_note(request):  # change attendance note for student
     input_value = {
         'ass_id': request.POST.get('ass_id'),
         'note': request.POST.get('note'),
     }
 
     print(input_value)
+
     Assign.objects.filter(id=input_value['ass_id']).update(attendance_note=input_value['note'])
     return HttpResponse(input_value)
 
 
 @require_POST
 @allow_user(['is_superuser', 'is_manager'])
-def create_att(request):  # add attendance status
+def create_att(request):  # create attendance for a class
     input_value = {
         'book_id': request.POST.get('book_id'),
         'class_id': request.POST.get('class_id'),
     }
 
     print(input_value)
-    att = Attendance(attendance_class=Classes.objects.get(id=input_value['class_id']),
-                     book=Books.objects.get(id=input_value['book_id']))
-    att.save()
+    attendance_obj = Attendance(
+        attendance_class=Classes.objects.get(id=input_value['class_id']),
+        book=Books.objects.get(id=input_value['book_id'])
+    )
+    attendance_obj.save()
     return HttpResponse(input_value)
 
 
@@ -520,7 +516,7 @@ def create_report_card(request):
 
 @require_POST
 @allow_user(['is_superuser', 'is_manager', 'is_teacher'])
-def create_hw(request):  # add home work status
+def create_hw(request):  # create homework for attendance
     input_value = {
         'hw_title': request.POST.get('hw_title'),
         'hw_description': request.POST.get('hw_description'),
@@ -528,15 +524,17 @@ def create_hw(request):  # add home work status
     }
 
     print(input_value)
-    hw = HomeWork(attendance=Attendance.objects.get(id=input_value['hw_att']),
-                  title=input_value['hw_title'], description=input_value['hw_description'])
-    hw.save()
+    homework_obj = HomeWork(
+        attendance=Attendance.objects.get(id=input_value['hw_att']),
+        title=input_value['hw_title'], description=input_value['hw_description']
+    )
+    homework_obj.save()
     return HttpResponse(input_value)
 
 
 @require_POST
 @allow_user(['is_superuser', 'is_manager', 'is_teacher'])
-def upload_emp_form(request):  # Upload Image Form
+def upload_emp_form(request):  # Upload Image Form for employment form
     image_value = request.FILES.get('file')
     input_value = request.POST.get('emp_form_id')
     obj = EmploymentForm.objects.get(id=input_value)

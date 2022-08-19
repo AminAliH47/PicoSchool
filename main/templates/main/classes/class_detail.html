@@ -174,23 +174,55 @@
             </div>
             <div class="single-info-details">
                 <div class="item-content">
-                    <div class="header-inline item-header">
-                        <span>نام کلاس</span>
-                        <h3 class="text-dark-medium font-medium">{{ attendance.attendance_class.name }}</h3>
-                        <span>تاریخ برگزاری کلاس</span>
-                        <h3 class="text-dark-medium font-medium">{{ attendance.jdate }}</h3>
-                        <span>کتاب تدریس شده</span>
-                        <h3 class="text-dark-medium font-medium">{{ attendance.book }}</h3>
-                        <br>
-                        <div class="d-block">
-                            <span>مقطع</span>
-                            <h3 class="text-dark-medium font-medium">{{ attendance.attendance_class.grade }}</h3>
-                            <span>رشته</span>
-                            <h3 class="text-dark-medium font-medium">{{ attendance.attendance_class.major }}</h3>
-                        </div>
+                    <div class="header-inline item-header mb-5 table-responsive">
+                        <table class="table">
+                            <thead class="bg-primary text-white">
+                                <tr>
+                                    <th>
+                                        نام کلاس
+                                    </th>
+                                    <th>
+                                       تاریخ برگزاری کلاس
+                                    </th>
+                                    <th>
+                                      کتاب تدریس شده
+                                    </th>
+                                    <th>
+                                    </th>
+                                    <th>
+                                        مقطع
+                                    </th>
+                                    <th>
+                                        رشته
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    {{ attendance.attendance_class.name }}
+                                </td>
+                                <td>
+                                   {{ attendance.jdate }}
+                                </td>
+                                <td>
+                                   {{ attendance.book }}
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                    {{ attendance.attendance_class.grade }}
+                                </td>
+                                <td>
+                                    {{ attendance.attendance_class.major }}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div>
-                        <button class="btn btn-warning mb-3" data-toggle="modal" data-target="#HWModal">افزودن تکلیف
+                        <button class="btn btn-warning mb-3" data-toggle="modal" data-target="#HWModal">
+                            افزودن تکلیف
                         </button>
                         <!-- Modal -->
                         <div class="modal fade" id="HWModal" tabindex="-1" role="dialog"
@@ -224,7 +256,7 @@
                         </div>
                     </div>
                     <div class="info-table table-responsive">
-                        <table class="table w-100">
+                        <table class="table table-striped w-100">
                             <thead>
                             <tr>
                                 <th>شماره</th>

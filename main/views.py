@@ -105,7 +105,7 @@ def student_detail(request, pk):
     user = User.objects.filter(is_active=True, is_student=True)
     context = {
         'person': get_object_or_404(user, pk=pk),
-        'page_title': 'جزپیات دانش آموز',
+        'page_title': 'جزئیات دانش آموز',
         'majors': Major.objects.all(),
         'present': present_percent(),
         'absent': absent_percent(),
@@ -120,7 +120,7 @@ def parent_detail(request, pk):
     user = User.objects.filter(is_active=True, is_parent=True)
     context = {
         'person': get_object_or_404(user, pk=pk),
-        'page_title': 'جزپیات والد یا قیم',
+        'page_title': 'جزئیات والد یا قیم',
     }
     return render(request, "main/persons/person_detail.html", context)
 
@@ -131,7 +131,7 @@ def teacher_detail(request, pk):
     user = User.objects.filter(is_active=True, is_teacher=True)
     context = {
         'person': get_object_or_404(user, pk=pk),
-        'page_title': 'جزپیات دبیر',
+        'page_title': 'جزئیات دبیر',
     }
     return render(request, "main/persons/person_detail.html", context)
 
@@ -157,7 +157,7 @@ def class_detail(request, pk):
     cls = get_object_or_404(Classes, pk=pk)
     context = {
         "class": cls,
-        "page_title": "جزپیات کلاس",
+        "page_title": "جزئیات کلاس",
         'atts': Classes.objects.filter(pk=pk, attendance_class__pk=pk),
         'jalali_date': change_month(str(jdatetime.date.fromgregorian(date=timezone.now()))),
         'books': Books.objects.filter(grade__pk=cls.grade.pk, major__pk=cls.major.pk),
@@ -170,7 +170,7 @@ def class_detail(request, pk):
 def attendance_detail(request, pk, date):
     context = {
         "attendance": get_object_or_404(Attendance, pk=pk, date=date),
-        "page_title": "جزپیات حضور و غیاب",
+        "page_title": "جزئیات حضور و غیاب",
     }
     return render(request, "main/classes/class_detail.html", context)
 
