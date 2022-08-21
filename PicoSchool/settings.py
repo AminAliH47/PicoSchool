@@ -18,13 +18,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-v8^=%xscnp@y4qyoie7i61od5ds&-z18ul6cvt))_cxl+n3=cl'
+SECRET_KEY = os.environ.get("SECRET_KEY","1t 1s $ecure!")
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get("DEBUG", default=0))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 # Application definition
 
@@ -96,13 +96,17 @@ WSGI_APPLICATION = 'PicoSchool.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get("POSTGRES_DB" ,'school'),
+        'USER': os.environ.get("POSTGRES_USER" ,'postgres'),
+        'PASSWORD': os.environ.get("POSTGRES_PASSWORD", "password"),
+        'HOST': os.environ.get("PG_HOST", "db"),
     },
-    'OPTIONS': {
-        'timeout': 20,
-    }
+   'OPTIONS': {
+       'timeout': 20,
+   }
 }
+
 
 # CACHES = {
 #     'default': {
@@ -153,10 +157,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn", 'static')
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Upload File setting
-MEDIA_ROOT = os.path.join(BASE_DIR, "static_cdn", 'media')
+MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = 'media/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
