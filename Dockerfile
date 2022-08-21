@@ -5,8 +5,10 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # creating and changing to none-root user. (-mr: creating a HOME directory)
-COPY chown_vol_static.sh /usr/local/bin/chown_vol_static
-RUN chmod 4755 /usr/local/bin/chown_vol_static && \
+RUN apt-get update && \
+    apt-get install gosu -y  && \
+    rm -rf /var/lib/apt/lists/* && \
+    chmod +s /usr/sbin/gosu && \
     useradd -mr -d /home/app -s /bin/bash app
 
 USER app

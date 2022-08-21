@@ -1,7 +1,7 @@
 #!/bin/sh
 
-#gosu root chown -R app:app /home/app/staticfiles/
-chown_vol_static
+gosu root chown -R app:app /home/app/staticfiles/
+#chown_vol_static
 
 if [ "$DATABASE" = "postgres" ]
 then
