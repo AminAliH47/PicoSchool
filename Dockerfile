@@ -25,7 +25,7 @@ ENV PATH "$PATH:/home/app/.local/bin"
 
 # upgrading pip and installing dependencies.
 RUN pip install --upgrade pip 
-COPY --chown=app:app /home/app/requirements.txt .
+COPY --chown=app:app requirements.txt .
 RUN pip install -r /home/app/requirements.txt 
 
 # copy project

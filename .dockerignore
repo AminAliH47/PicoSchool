@@ -1,0 +1,10 @@
+.git
+.gitattributes
+.gitignore
+Dockerfile
+LICENSE
+README.md 
+README_EN.md 
+db.sqlite3
+docker-compose.yml
+env
